@@ -35,9 +35,9 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // 自製精美向量圖示組件（免去外部加載圖標庫的風險，確保 GitHub 託管萬無一失）
+    // 自製精美向量圖示組件（100% 符合 React className 規範，確保 GitHub 託管完美相容）
     const IconVolume2 = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" class="w-7 h-7">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7">
         <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
         <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
         <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
@@ -45,20 +45,20 @@
     );
 
     const IconChevronRight = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" class="w-5 h-5">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <polyline points="9 18 15 12 9 6"></polyline>
       </svg>
     );
 
     const IconRotateCcw = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" class="w-5 h-5">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
         <polyline points="3 3 3 8 8 8"></polyline>
       </svg>
     );
 
     const IconTrophy = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" class="w-24 h-24 text-yellow-400">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-24 h-24 text-yellow-400">
         <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
         <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
         <path d="M4 22h16"></path>
@@ -68,48 +68,48 @@
     );
 
     const IconBookOpen = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="w-5 h-5">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
       </svg>
     );
 
     const IconUser = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="w-10 h-10">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-10 h-10">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
         <circle cx="12" cy="7" r="4"></circle>
       </svg>
     );
 
     const IconEye = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="w-5 h-5">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
         <circle cx="12" cy="12" r="3"></circle>
       </svg>
     );
 
     const IconArrowLeft = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" class="w-4 h-4">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
       </svg>
     );
 
     const IconSettings = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="w-5 h-5">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <circle cx="12" cy="12" r="3"></circle>
         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
       </svg>
     );
 
-    // 教育部官方標準詞庫 + 真實生字對照表
+    // 教育部官方標準詞庫 + 真實生字對照表（加上 speech 多音字讀音校準修正）
     const WORD_DATABASE = {
       G1: {
         7: [
           { word: '還有', zhuyin: ['ㄏㄞˊ', 'ㄧㄡˇ'] },
-          { word: '還書', zhuyin: ['ㄏㄨㄢˊ', 'ㄕㄨ'] },
-          { word: '漂亮', zhuyin: ['ㄆㄧㄠˋ', 'ㄌㄧㄤ˙'] },
-          { word: '漂流', zhuyin: ['ㄆㄧㄠ', 'ㄌㄧㄡˊ'] },
+          { word: '還書', zhuyin: ['ㄏㄨㄢˊ', 'ㄕㄨ'], speech: '環書' }, // 精確校正：解決網頁TTS「還」讀作ㄏㄞˊ的錯誤
+          { word: '漂亮', zhuyin: ['ㄆㄧㄠˋ', 'ㄌㄧㄤˋ'] }, // 精確校正：依指示將「亮」修正為四聲（ㄌㄧㄤˋ）
+          { word: '漂流', zhuyin: ['ㄆㄧㄠ', 'ㄌㄧㄡˊ'], speech: '飄流' }, // 精確校正：解決網頁TTS「漂」讀作ㄆㄧㄠˋ的錯誤
           { word: '好啊', zhuyin: ['ㄏㄠˇ', 'ㄚ˙'] },
           { word: '畫畫', zhuyin: ['ㄏㄨㄚˋ', 'ㄏㄨㄚˋ'] },
           { word: '漫畫', zhuyin: ['ㄇㄢˋ', 'ㄏㄨㄚˋ'] }
@@ -120,7 +120,7 @@
           { word: '秋天', zhuyin: ['ㄑㄧㄡ', 'ㄊㄧㄢ'] },
           { word: '果子', zhuyin: ['ㄍㄨㄛˇ', 'ㄗ˙'] },
           { word: '地方', zhuyin: ['ㄉㄧˋ', 'ㄈㄤ'] },
-          { word: '長大', zhuyin: ['ㄓㄤˇ', 'ㄉㄚˋ'] },
+          { word: '長大', zhuyin: ['ㄓㄤˇ', 'ㄉㄚˋ'], speech: '掌大' }, // 精確校正：解決網頁TTS「長」讀作ㄔㄤˊ的錯誤
           { word: '敬上', zhuyin: ['ㄐㄧㄥˋ', 'ㄕㄤˋ'] }
         ],
         9: [
@@ -130,7 +130,7 @@
           { word: '校園', zhuyin: ['ㄒㄧㄠˋ', 'ㄩㄢˊ'] },
           { word: '工作', zhuyin: ['ㄍㄨㄥ', 'ㄗㄨㄛˋ'] },
           { word: '一邊', zhuyin: ['ㄧˋ', 'ㄅㄧㄢ'] },
-          { word: '學校', zhuyin: ['ㄒㄩㄝˊ', 'ㄒㄧㄠˋ'] },
+          { word: '學校', zhuyin: ['ㄒㄩㄝˊ', 'ㄒㄩㄝˋ'] }, 
           { word: '一樣', zhuyin: ['ㄧˊ', 'ㄧㄤˋ'] },
           { word: '當成', zhuyin: ['ㄉㄤ', 'ㄔㄥˊ'] }
         ],
@@ -185,7 +185,7 @@
         10: [
           { word: '光陰似箭', zhuyin: ['ㄍㄨㄤ', 'ㄧㄣ', 'ㄙˋ', 'ㄐㄧㄢˋ'] },
           { word: '精益求精', zhuyin: ['ㄐㄧㄥ', 'ㄧˋ', 'ㄑㄧㄡˊ', 'ㄐㄧㄥ'] },
-          { word: '美不勝收', zhuyin: ['ㄇㄟˇ', 'ㄅㄨˋ', 'ㄕㄥ', 'ㄕㄡ'] }
+          { word: '美不勝收', zhuyin: ['ㄇㄟˇ', 'ㄅㄨˋ', 'ㄕㄥ', 'ㄕㄡ'], speech: '美不升收' } // 精確校正：勝讀作ㄕㄥ
         ],
         11: [
           { word: '破釜沉舟', zhuyin: ['ㄆㄛˋ', 'ㄈㄨˇ', 'ㄔㄣˊ', 'ㄓㄡ'] },
@@ -227,26 +227,32 @@
       window.speechSynthesis.speak(utterance);
     };
 
-    // 直式注音渲染：實現「輕聲置頂、標調靠右、精準貼合」規則
-    const ZhuyinVertical = ({ zy, containerHeight }) => {
+    // 直式注音渲染：實現「輕聲置頂、標調靠右、精準貼合、高度完全一致」規則
+    const ZhuyinVertical = ({ zy }) => {
       const { symbols, tone, isNeutral } = parseZhuyin(zy);
       
       return (
         <div 
-          className="flex flex-col items-center justify-center relative font-sans font-extrabold animate-in fade-in duration-200"
-          style={{ height: containerHeight, width: '1.25rem', lineHeight: 1 }}
+          className="flex flex-col items-center justify-between relative font-sans font-extrabold animate-in fade-in duration-200 w-[1.25rem] self-stretch py-0.5"
         >
-          {/* 輕聲（˙）置頂 */}
+          {/* 輕聲（˙）置頂 - 使用完全圓形的 CSS 實心點，解決跨裝置中文字型輕聲渲染偏差的問題 */}
           {isNeutral && (
-            <div className="absolute top-1.5 text-[0.7rem] leading-none text-slate-700 font-black">˙</div>
+            <div className="w-full flex items-center justify-center pt-1 pb-1 flex-shrink-0">
+              <div className="w-1.5 h-1.5 bg-slate-700 rounded-full shadow-sm"></div>
+            </div>
           )}
-          <div className={`flex flex-col items-center justify-center ${isNeutral ? 'mt-4' : ''} flex-1 w-full`}>
+          
+          {/* 符號均勻垂直分佈區 */}
+          <div className="flex flex-col items-center justify-around flex-1 w-full h-full min-h-0">
             {symbols.map((s, idx) => (
-              <div key={idx} className="relative w-full text-center text-base md:text-lg text-slate-700">
-                {s}
-                {/* 聲調（ˊˇˋ）靠右緊貼最後一個符號 */}
+              <div 
+                key={idx} 
+                className="flex-1 flex items-center justify-center relative w-full text-center text-sm md:text-base text-slate-700 leading-none font-black"
+              >
+                <span>{s}</span>
+                {/* 標準聲調（ˊˇˋ）靠右緊貼對應符號的右側中線，位置微調至最完美的 left-[70%] */}
                 {!isNeutral && tone !== '' && idx === symbols.length - 1 && (
-                  <span className="absolute left-[85%] top-1/2 -translate-y-1/2 text-xs md:text-sm text-slate-500 ml-0.5 font-bold">
+                  <span className="absolute left-[70%] top-[48%] -translate-y-1/2 text-xs md:text-sm text-slate-500 font-extrabold select-none pointer-events-none whitespace-nowrap">
                     {tone}
                   </span>
                 )}
@@ -257,10 +263,10 @@
       );
     };
 
-    // 田字格元件：帶有虛線十字、經典字體
+    // 田字格元件：帶有虛線十字、經典字體，並以 items-stretch 與直式注音等高對齊
     const TianZiGe = ({ char, zhuyin, showChar, sizeClass, fontSize }) => {
       return (
-        <div className="flex items-center gap-0.5 md:gap-1.5 h-full">
+        <div className="flex items-stretch gap-0.5 md:gap-1.5">
           {/* 田字格 */}
           <div 
             className={`${sizeClass} relative border-[2.5px] border-slate-400 bg-white rounded-lg shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 tianzi-font`}
@@ -275,8 +281,8 @@
               </span>
             )}
           </div>
-          {/* 直排注音 */}
-          <ZhuyinVertical zy={zhuyin} containerHeight="100%" />
+          {/* 直排注音 (高度自動與田字格完全等高拉伸) */}
+          <ZhuyinVertical zy={zhuyin} />
         </div>
       );
     };
@@ -312,7 +318,8 @@
       useEffect(() => {
         if (step === 'quiz' && quizList.length > 0) {
           const timer = setTimeout(() => {
-            speak(quizList[currentIdx].word);
+            const currentQuestion = quizList[currentIdx];
+            speak(currentQuestion.speech || currentQuestion.word);
           }, 500);
           return () => clearTimeout(timer);
         }
@@ -454,7 +461,7 @@
               <div className="w-full bg-slate-100 h-1.5">
                 <div 
                   className="bg-indigo-500 h-full transition-all duration-700 ease-out" 
-                  style={{ width: `${((currentIdx + 1) / quizList.length) * 100}%` }}
+                  style={{ width: ((currentIdx + 1) / quizList.length) * 100 + '%' }}
                 ></div>
               </div>
               
@@ -483,7 +490,10 @@
                 </div>
 
                 <button 
-                  onClick={() => speak(quizList[currentIdx].word)}
+                  onClick={() => {
+                    const currentQuestion = quizList[currentIdx];
+                    speak(currentQuestion.speech || currentQuestion.word);
+                  }}
                   className="mt-6 w-14 h-14 bg-white border border-slate-200 rounded-full flex items-center justify-center text-indigo-500 hover:bg-indigo-50 transition-all shadow-sm active:scale-90"
                   title="聽讀音"
                 >
