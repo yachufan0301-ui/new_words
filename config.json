@@ -1,0 +1,7 @@
+{
+  "bopomofoMapPath": "data/bopomofoMap.json",
+  "students": [
+    { "name": "Ian", "path": "data/ian.json" },
+    { "name": "Hugo", "path": "data/hugo.json" }
+  ]
+}
