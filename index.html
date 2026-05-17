@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>圈詞好棒棒 - 拼音與注音強化練習</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React & ReactDOM (Production) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  
+  <!-- Babel compiler for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    /* 隱藏捲軸但仍可滾動 */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const App = () => {
+      // 狀態管理
+      const [step, setStep] = useState('loading'); 
+      const [bopomofoMap, setBopomofoMap] = useState({});
+      const [rawData, setRawData] = useState({});
+      
+      const [role, setRole] = useState(null); 
+      const [lesson, setLesson] = useState(null);
+      const [currentIndex, setCurrentIndex] = useState(0);
+      const [questions, setQuestions] = useState([]); 
+      const [isRevealed, setIsRevealed] = useState(false);
+      const [errorMsg, setErrorMsg] = useState("");
+      const [loadMode, setLoadMode] = useState("auto"); 
+
+      const Icons = {
+        User: () => (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        ),
+        Volume: () => (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        ),
+        ChevronRight: () => (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        ),
+        Graduation: () => (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        ),
+        Trophy: () => (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        ),
+        ArrowLeft: () => (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        ),
+        Folder: () => (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+        ),
+        Upload: () => (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+        ),
+        Refresh: () => (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        )
+      };
+
+      useEffect(() => {
+        fetchAutoConfig();
+      }, []);
+
+      const fetchAutoConfig = async () => {
+        setStep('loading');
+        setErrorMsg("");
+        try {
+          const configRes = await fetch('config.json');
+          if (!configRes.ok) throw new Error("找不到 config.json");
+          const config = await configRes.json();
+
+          let bopoMapData = {};
+          if (config.bopomofoMapPath) {
+            const bopoRes = await fetch(config.bopomofoMapPath);
+            if (bopoRes.ok) bopoMapData = await bopoRes.json();
+          }
+          setBopomofoMap(bopoMapData);
+
+          const loadedRawData = {};
+          if (config.students && Array.isArray(config.students)) {
+            for (const studentInfo of config.students) {
+              try {
+                const studentRes = await fetch(studentInfo.path);
+                if (studentRes.ok) {
+                  const studentJson = await studentRes.json();
+                  const studentName = studentJson.student || studentInfo.name;
+                  loadedRawData[studentName] = studentJson;
+                }
+              } catch (e) {
+                console.warn(`無法讀取檔案: ${studentInfo.path}`, e);
+              }
+            }
+          }
+
+          if (Object.keys(loadedRawData).length > 0) {
+            setRawData(loadedRawData);
+            setLoadMode("auto");
+            setStep('role');
+          } else {
+            throw new Error("沒有成功載入任何學生資料");
+          }
+        } catch (err) {
+          setLoadMode("manual");
+          setStep('init'); 
+        }
+      };
+
+      const handleFolderUpload = async (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
+
+        const newRawData = {};
+        let newBopomofoMap = {};
+        let loadedRolesCount = 0;
+        setErrorMsg("");
+
+        for (const file of files) {
+          if (!file.name.endsWith('.json')) continue;
+          try {
+            const text = await file.text();
+            const json = JSON.parse(text);
+            const nameWithoutExt = file.name.replace('.json', '');
+            if (nameWithoutExt === 'bopomofoMap') {
+              newBopomofoMap = json;
+            } else {
+              const studentName = json.student || nameWithoutExt;
+              const lessonsData = json.lessons || json; 
+              newRawData[studentName] = { student: studentName, lessons: lessonsData };
+              loadedRolesCount++;
+            }
+          } catch (err) {
+            setErrorMsg(`解析失敗: ${file.name}`);
+            return;
+          }
+        }
+
+        if (loadedRolesCount > 0) {
+          setBopomofoMap(newBopomofoMap);
+          setRawData(newRawData);
+          setLoadMode("manual");
+          setStep('role');
+        } else {
+          setErrorMsg("未發現符合格式的 JSON 檔。");
+        }
+      };
+
+      const speak = (text) => {
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'zh-TW';
+        utter.rate = 0.85;
+        window.speechSynthesis.speak(utter);
+      };
+
+      const startQuiz = (count) => {
+        const studentObj = rawData[role];
+        if (!studentObj || !studentObj.lessons) return;
+        let pool = lesson === 'ALL' ? Object.values(studentObj.lessons).flat() : (studentObj.lessons[lesson] || []);
+        if (pool.length === 0) return;
+        let selected = [...pool].sort(() => Math.random() - 0.5);
+        if (count !== 'ALL' && count < selected.length) selected = selected.slice(0, count);
+        setQuestions(selected);
+        setCurrentIndex(0);
+        setIsRevealed(false);
+        setStep('quiz');
+        setTimeout(() => speak(selected[0].word), 500);
+      };
+
+      const parseCharZhuyin = (char, charIndex, wordZhuyinString) => {
+        let full = "";
+        if (wordZhuyinString) {
+          const parts = wordZhuyinString.trim().split(/\s+/);
+          if (parts[charIndex]) full = parts[charIndex];
+        }
+        if (!full) full = bopomofoMap[char] || "";
+        if (!full) return { main: ["?"], tone: "" };
+        
+        let tone = "";
+        let mainStr = full;
+        if (full.startsWith("˙") || full.endsWith("˙")) {
+          tone = "˙"; mainStr = full.replace("˙", "");
+        } else {
+          const tones = ["ˊ", "ˇ", "ˋ"];
+          for (let t of tones) {
+            if (full.endsWith(t)) {
+              tone = t; mainStr = full.replace(t, ""); break;
+            }
+          }
+        }
+        return { main: mainStr.split(''), tone };
+      };
+
+      const getDynamicStyles = (length) => {
+        if (length >= 4) {
+          return {
+            hClass: "h-14 md:h-16", wChar: "w-14 md:w-16", wBopo: "w-8 md:w-10",
+            charFontSize: "text-3xl md:text-4xl", bopoFontSize: "text-lg md:text-xl",
+            toneFontSize: "text-xl md:text-2xl", dotFontSize: "text-xl md:text-2xl",
+            containerGap: "gap-1 py-0.5", bopoPadding: "py-0.5 md:py-1"
+          };
+        } else if (length === 3) {
+          return {
+            hClass: "h-[4.5rem] md:h-[5.5rem]", wChar: "w-[4.5rem] md:w-[5.5rem]", wBopo: "w-10 md:w-12",
+            charFontSize: "text-4xl md:text-5xl", bopoFontSize: "text-xl md:text-2xl",
+            toneFontSize: "text-2xl md:text-3xl", dotFontSize: "text-xl md:text-2xl",
+            containerGap: "gap-1.5 py-1", bopoPadding: "py-1 md:py-1.5"
+          };
+        } else {
+          return {
+            hClass: "h-24 md:h-32", wChar: "w-24 md:w-32", wBopo: "w-12 md:w-16",
+            charFontSize: "text-6xl md:text-8xl", bopoFontSize: "text-3xl md:text-4xl",
+            toneFontSize: "text-4xl md:text-5xl", dotFontSize: "text-3xl md:text-4xl",
+            containerGap: "gap-2 py-2", bopoPadding: "py-1.5 md:py-2"
+          };
+        }
+      };
+
+      const VerticalGridItem = ({ char, charIndex, wordZhuyin, isRevealed, wordLength }) => {
+        const { main, tone } = parseCharZhuyin(char, charIndex, wordZhuyin);
+        const s = getDynamicStyles(wordLength);
+        return (
+          <div className={`flex items-center w-full justify-center ${s.containerGap}`}>
+            <div className={`${s.wChar} ${s.hClass} shrink-0 bg-white border-2 border-slate-700 relative flex items-center justify-center rounded-xl shadow-sm`}>
+              <div className="absolute inset-0 pointer-events-none opacity-20">
+                <div className="absolute top-1/2 left-0 w-full h-px border-t border-dashed border-slate-600"></div>
+                <div className="absolute left-1/2 top-0 h-full w-px border-l border-dashed border-slate-600"></div>
+              </div>
+              <span className={`font-black z-10 transition-all duration-300 ${isRevealed ? 'opacity-100 scale-100 text-slate-800' : 'opacity-0 scale-50'} ${s.charFontSize}`} style={{ fontFamily: '"PMingLiU", "MingLiU", "新細明體", serif' }}>
+                {char}
+              </span>
+            </div>
+            <div className={`relative flex flex-col justify-between items-center ${s.wBopo} ${s.hClass} ${s.bopoPadding} shrink-0`}>
+                {tone === "˙" && <div className="flex items-center justify-center w-full mb-1"><span className={`font-black text-red-500 ${s.dotFontSize}`}>˙</span></div>}
+                {main.map((symbol, idx) => (
+                    <div key={idx} className="flex items-center justify-center w-full flex-1 min-h-0">
+                        <div className="relative flex items-center justify-center">
+                            <span className={`font-black text-blue-900 ${s.bopoFontSize}`}>{symbol}</span>
+                            {idx === main.length - 1 && tone !== "" && tone !== "˙" && (
+                                <span className={`absolute left-[100%] ml-0.5 font-black text-red-500 ${s.toneFontSize}`}>{tone}</span>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <div className="min-h-screen bg-slate-50 p-4 flex flex-col items-center select-none overflow-hidden justify-center">
+          <header className="w-full max-w-md flex items-center justify-between py-2 md:py-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-600 rounded-xl text-white shadow-lg"><Icons.Graduation /></div>
+                <h1 className="text-lg font-black text-slate-800 tracking-tight">圈詞好棒棒</h1>
+              </div>
+              <div className="flex gap-2">
+                {step === 'role' && <button onClick={fetchAutoConfig} className="p-2 text-slate-400 hover:text-slate-600 transition-colors"><Icons.Refresh /></button>}
+                {step !== 'loading' && step !== 'init' && step !== 'role' && <button onClick={() => setStep('role')} className="p-2 text-slate-400 hover:text-slate-600 transition-colors"><Icons.ArrowLeft /></button>}
+              </div>
+          </header>
+
+          <main className="w-full max-w-md bg-white rounded-[2rem] shadow-xl p-6 min-h-[520px] md:min-h-[580px] flex flex-col border border-slate-200">
+            {step === 'loading' && (
+              <div className="flex-grow flex flex-col items-center justify-center text-center gap-4">
+                <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-slate-500 font-bold text-sm">正在載入雲端詞庫...</p>
+              </div>
+            )}
+
+            {step === 'init' && (
+              <div className="flex-1 flex flex-col items-center justify-center gap-5 text-center">
+                 <div className="w-20 h-20 bg-blue-50 border-4 border-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-1"><Icons.Folder /></div>
+                 <h2 className="text-2xl font-black text-slate-800">載入本地詞庫</h2>
+                 <p className="text-sm text-slate-500">請手動上傳您的 JSON 檔案夾</p>
+                 <label className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-lg shadow-lg cursor-pointer flex items-center justify-center gap-2">
+                   <Icons.Upload /> 選擇資料夾並載入
+                   <input type="file" webkitdirectory="true" directory="true" multiple className="hidden" onChange={handleFolderUpload} />
+                 </label>
+              </div>
+            )}
+
+            {step === 'role' && (
+              <div className="flex-1 flex flex-col justify-center gap-4">
+                <h2 className="text-center text-slate-400 font-bold uppercase text-[10px] tracking-widest">請選擇學生</h2>
+                {Object.keys(rawData).map((roleKey, idx) => (
+                  <button key={roleKey} onClick={() => {setRole(roleKey); setStep('lesson');}} className={`p-5 rounded-2xl flex items-center gap-4 active:scale-95 transition-all border-2 ${idx % 2 === 0 ? 'bg-blue-50 border-blue-100 text-blue-900' : 'bg-purple-50 border-purple-100 text-purple-900'}`}>
+                      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm"><Icons.User /></div>
+                      <div className="text-left font-black text-lg">{roleKey}</div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {step === 'lesson' && (
+              <div className="flex-1 flex flex-col justify-between">
+                <div>
+                  <h2 className="text-center text-slate-400 font-bold uppercase text-[10px] tracking-widest mb-4">選擇課次</h2>
+                  <div className="grid grid-cols-2 gap-2 overflow-y-auto max-h-[260px] p-1 no-scrollbar">
+                    {role && Object.keys(rawData[role].lessons).map(l => (
+                      <button key={l} onClick={() => setLesson(l)} className={`p-3 rounded-xl border-2 font-bold transition-all ${lesson === l ? 'bg-blue-600 text-white border-blue-600' : 'bg-white border-slate-100 text-slate-500'}`}>{l}</button>
+                    ))}
+                    <button onClick={() => setLesson('ALL')} className={`p-3 rounded-xl border-2 font-bold col-span-2 ${lesson === 'ALL' ? 'bg-slate-800 text-white' : 'bg-slate-50 border-slate-100'}`}>全部隨機</button>
+                  </div>
+                </div>
+                {lesson && (
+                    <div className="flex gap-2 mt-4">
+                        {[5, 10, 'ALL'].map(n => <button key={n} onClick={() => startQuiz(n)} className="flex-1 py-3 bg-blue-600 text-white font-black rounded-xl active:scale-95 shadow-md">{n === 'ALL' ? '全部' : n}</button>)}
+                    </div>
+                )}
+              </div>
+            )}
+
+            {step === 'quiz' && questions.length > 0 && (
+              <div className="flex-1 flex flex-col justify-between">
+                <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mb-2">
+                    <div className="bg-blue-600 h-full transition-all duration-300" style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }} />
+                </div>
+                <div className="flex-1 flex flex-col items-center justify-center">
+                    {questions[currentIndex].word.split('').map((char, i) => (
+                        <VerticalGridItem key={i} char={char} charIndex={i} wordZhuyin={questions[currentIndex].zhuyin} isRevealed={isRevealed} wordLength={questions[currentIndex].word.length} />
+                    ))}
+                </div>
+                <div className="space-y-4">
+                  <div className="flex justify-center"><button onClick={() => speak(questions[currentIndex].word)} className="p-3 bg-blue-50 text-blue-600 rounded-full shadow-sm animate-pulse"><Icons.Volume /></button></div>
+                  {!isRevealed ? (
+                      <button onClick={() => setIsRevealed(true)} className="w-full py-4 bg-slate-800 text-white rounded-2xl font-black text-lg">看答案</button>
+                  ) : (
+                      <button onClick={() => { if (currentIndex < questions.length - 1) { setCurrentIndex(currentIndex + 1); setIsRevealed(false); setTimeout(() => speak(questions[currentIndex+1].word), 500); } else { setStep('result'); } }} className="w-full py-4 bg-green-600 text-white rounded-2xl font-black text-lg flex items-center justify-center gap-2">下一題 <Icons.ChevronRight /></button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {step === 'result' && (
+              <div className="flex-1 flex flex-col items-center justify-center text-center gap-6">
+                <div className="w-20 h-20 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center shadow-inner animate-bounce"><Icons.Trophy /></div>
+                <h2 className="text-2xl font-black text-slate-800">完成練習！</h2>
+                <button onClick={() => setStep('lesson')} className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-md">繼續挑戰</button>
+              </div>
+            )}
+          </main>
+          <footer className="mt-4 text-slate-300 text-[9px] font-bold text-center">Bopomofo Practice v6.0</footer>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
