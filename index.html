@@ -127,14 +127,14 @@
       </svg>
     );
 
-    // 教育部官方標準詞庫 + 真實生字對照表（加上 speech 多音字讀音校準修正）
+    // 官方標準詞庫 + 真實生字對照表 (Hugo L10 詞庫全新更新)
     const WORD_DATABASE = {
       G1: {
         7: [
           { word: '還有', zhuyin: ['ㄏㄞˊ', 'ㄧㄡˇ'] },
-          { word: '還書', zhuyin: ['ㄏㄨㄢˊ', 'ㄕㄨ'], speech: '環書' }, // 精確校正：解決網頁TTS「還」讀作ㄏㄞˊ的錯誤
-          { word: '漂亮', zhuyin: ['ㄆㄧㄠˋ', 'ㄌㄧㄤˋ'] }, // 精確校正：依指示將「亮」修正為四聲（ㄌㄧㄤˋ）
-          { word: '漂流', zhuyin: ['ㄆㄧㄠ', 'ㄌㄧㄡˊ'], speech: '飄流' }, // 精確校正：解決網頁TTS「漂」讀作ㄆㄧㄠˋ的錯誤
+          { word: '還書', zhuyin: ['ㄏㄨㄢˊ', 'ㄕㄨ'], speech: '環書' }, 
+          { word: '漂亮', zhuyin: ['ㄆㄧㄠˋ', 'ㄌㄧㄤˋ'] }, 
+          { word: '漂流', zhuyin: ['ㄆㄧㄠ', 'ㄌㄧㄡˊ'], speech: '飄流' }, 
           { word: '好啊', zhuyin: ['ㄏㄠˇ', 'ㄚ˙'] },
           { word: '畫畫', zhuyin: ['ㄏㄨㄚˋ', 'ㄏㄨㄚˋ'] },
           { word: '漫畫', zhuyin: ['ㄇㄢˋ', 'ㄏㄨㄚˋ'] }
@@ -145,7 +145,7 @@
           { word: '秋天', zhuyin: ['ㄑㄧㄡ', 'ㄊㄧㄢ'] },
           { word: '果子', zhuyin: ['ㄍㄨㄛˇ', 'ㄗ˙'] },
           { word: '地方', zhuyin: ['ㄉㄧˋ', 'ㄈㄤ'] },
-          { word: '長大', zhuyin: ['ㄓㄤˇ', 'ㄉㄚˋ'], speech: '掌大' }, // 精確校正：解決網頁TTS「長」讀作ㄔㄤˊ的錯誤
+          { word: '長大', zhuyin: ['ㄓㄤˇ', 'ㄉㄚˋ'], speech: '掌大' }, 
           { word: '敬上', zhuyin: ['ㄐㄧㄥˋ', 'ㄕㄤˋ'] }
         ],
         9: [
@@ -191,7 +191,7 @@
       },
       G4: {
         7: [
-          { word: '足跡', zhuyin: ['ㄗㄨˊ', 'ㄐㄧ'] }, // 精確校正：跡的教育部讀音為 ㄐㄧ（一聲），而非 ㄐㄧˋ（四聲）
+          { word: '足跡', zhuyin: ['ㄗㄨˊ', 'ㄐㄧ'] }, 
           { word: '與眾不同', zhuyin: ['ㄩˇ', 'ㄓㄨㄥˋ', 'ㄅㄨˋ', 'ㄊㄨㄥˊ'] },
           { word: '得天獨厚', zhuyin: ['ㄉㄜˊ', 'ㄊㄧㄢ', 'ㄉㄨˊ', 'ㄏㄡˋ'] },
           { word: '深謀遠慮', zhuyin: ['ㄕㄣ', 'ㄇㄡˊ', 'ㄩㄢˇ', 'ㄌㄩˋ'] }
@@ -208,9 +208,24 @@
           { word: '刻苦耐勞', zhuyin: ['ㄎㄜˋ', 'ㄎㄨˇ', 'ㄋㄞˋ', 'ㄌㄠˊ'] }
         ],
         10: [
-          { word: '光陰似箭', zhuyin: ['ㄍㄨㄤ', 'ㄧㄣ', 'ㄙˋ', 'ㄐㄧㄢˋ'] },
-          { word: '精益求精', zhuyin: ['ㄐㄧㄥ', 'ㄧˋ', 'ㄑㄧㄡˊ', 'ㄐㄧㄥ'] },
-          { word: '美不勝收', zhuyin: ['ㄇㄟˇ', 'ㄅㄨˋ', 'ㄕㄥ', 'ㄕㄡ'], speech: '美不升收' } // 精確校正：勝讀作ㄕㄥ
+          // Hugo 第 10 課全新詞彙對照與校準
+          { word: '遺憾', zhuyin: ['ㄧˊ', 'ㄏㄢˋ'] },
+          { word: '耗盡', zhuyin: ['ㄏㄠˋ', 'ㄐㄧㄣˋ'] },
+          { word: '旱災', zhuyin: ['ㄏㄢˋ', 'ㄗㄞ'] },
+          { word: '水災', zhuyin: ['ㄕㄨㄟˇ', 'ㄗㄞ'] },
+          { word: '萬丈', zhuyin: ['ㄨㄢˋ', 'ㄓㄤˋ'] },
+          { word: '寬廣', zhuyin: ['ㄎㄨㄢ', 'ㄍㄨㄤˇ'] },
+          { word: '一望無際', zhuyin: ['ㄧ', 'ㄨㄤˋ', 'ㄨˊ', 'ㄐㄧˋ'] },
+          { word: '禁不住', zhuyin: ['ㄐㄧㄣ', 'ㄅㄨˊ', 'ㄓㄨˋ'], speech: '斤不住' }, // 精確校正：解決網頁將「禁」讀為去聲
+          { word: '打滾', zhuyin: ['ㄉㄚˇ', 'ㄍㄨㄣˇ'] },
+          { word: '忽然', zhuyin: ['ㄏㄨ', 'ㄖㄢˊ'] },
+          { word: '自豪', zhuyin: ['ㄗˋ', 'ㄏㄠˊ'] },
+          { word: '無妄之災', zhuyin: ['ㄨˊ', 'ㄨㄤˋ', 'ㄓ', 'ㄗㄞ'] },
+          { word: '集思廣益', zhuyin: ['ㄐㄧˊ', 'ㄙ', 'ㄍㄨㄢˇ', 'ㄧˋ'], speech: '集思管益' }, // 變調校正
+          { word: '不著邊際', zhuyin: ['ㄅㄨˋ', 'ㄓㄨㄛˊ', 'ㄅㄧㄢ', 'ㄐㄧˋ'] },
+          { word: '不遺餘力', zhuyin: ['ㄅㄨˋ', 'ㄧˊ', 'ㄩˊ', 'ㄌㄧˋ'] },
+          { word: '青苔', zhuyin: ['ㄑㄧㄥ', 'ㄊㄞˊ'] },
+          { word: '舌苔', zhuyin: ['ㄕㄜˊ', 'ㄊㄞ'] }
         ],
         11: [
           { word: '破釜沉舟', zhuyin: ['ㄆㄛˋ', 'ㄈㄨˇ', 'ㄔㄣˊ', 'ㄓㄡ'] },
@@ -321,7 +336,7 @@
       const [quizList, setQuizList] = useState([]);
       const [showAnswer, setShowAnswer] = useState(false);
       
-      // 頭像上傳狀態管理（保保存 React 狀態中）
+      // 頭像上傳狀態管理（保存在 React 狀態中）
       const [ianAvatar, setIanAvatar] = useState(null);
       const [hugoAvatar, setHugoAvatar] = useState(null);
 
@@ -576,9 +591,9 @@
                 ></div>
               </div>
               
-              <div className="px-6 py-4 flex justify-between items-center text-slate-400 font-extrabold text-sm">
+              <div className="px-6 py-4 flex justify-between items-center text-slate-400 font-extrabold text-sm font-sans">
                 <button onClick={() => setStep('lesson')} className="flex items-center hover:text-slate-600 transition-colors">
-                  <IconArrowLeft /> <span className="ml-1">退出</span>
+                  <IconArrowLeft /> <span className="ml-1 font-bold">退出</span>
                 </button>
                 
                 {/* 左側顯示目前挑戰者頭像與名稱 */}
@@ -589,7 +604,7 @@
                   <span className="text-slate-600 font-bold">{role === 'G1' ? 'Ian' : 'Hugo'} 正在挑戰！</span>
                 </div>
 
-                <div className="tracking-widest">
+                <div className="tracking-widest font-bold">
                   已完成 {currentIdx + 1} / {quizList.length}
                 </div>
               </div>
