@@ -37,8 +37,8 @@
     const { useState, useEffect, useRef } = React;
 
     // 自製精美向量圖示組件（100% 符合 React className 規範）
-    const IconVolume2 = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7">
+    const IconVolume2 = ({ className = "w-7 h-7" }) => (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
         <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
         <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
         <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
@@ -59,7 +59,7 @@
     );
 
     const IconTrophy = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-24 h-24 text-yellow-400">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-20 h-20 text-yellow-400">
         <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
         <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
         <path d="M4 22h16"></path>
@@ -100,6 +100,19 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
         <circle cx="12" cy="13" r="4"></circle>
+      </svg>
+    );
+
+    const IconCheck = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    );
+
+    const IconCross = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
       </svg>
     );
 
@@ -330,12 +343,15 @@
     function App() {
       const [step, setStep] = useState('role');
       const [role, setRole] = useState('G1');
-      const [selectedLesson, setSelectedLesson] = useState(7);
-      const [questionCount, setQuestionCount] = useState(5);
+      const [selectedLesson, setSelectedLesson] = useState(10);
+      const [questionCount, setQuestionCount] = useState(10);
       const [currentIdx, setCurrentIdx] = useState(0);
       const [quizList, setQuizList] = useState([]);
       const [showAnswer, setShowAnswer] = useState(false);
       
+      // 聽寫對錯紀錄：陣列內儲存每題的詞彙、拼音、發音以及 correct (true / false)
+      const [results, setResults] = useState([]);
+
       // 頭像上傳狀態管理（保存在 React 狀態中）
       const [ianAvatar, setIanAvatar] = useState(null);
       const [hugoAvatar, setHugoAvatar] = useState(null);
@@ -359,6 +375,7 @@
         setQuizList(selected);
         setCurrentIdx(0);
         setShowAnswer(false);
+        setResults([]); // 初始化聽寫對錯紀錄
         setStep('quiz');
       };
 
@@ -372,7 +389,12 @@
         }
       }, [step, currentIdx, quizList]);
 
-      const handleNext = () => {
+      // 紀錄手動評分並直接跳轉下一題或結算頁
+      const handleRecord = (isCorrect) => {
+        const currentItem = quizList[currentIdx];
+        const newResults = [...results, { ...currentItem, correct: isCorrect }];
+        setResults(newResults);
+
         if (currentIdx < quizList.length - 1) {
           setCurrentIdx(currentIdx + 1);
           setShowAnswer(false);
@@ -436,6 +458,20 @@
         } else {
           return hugoAvatar ? <img src={hugoAvatar} alt="Hugo" className="w-full h-full object-cover" /> : <DefaultHugoAvatar />;
         }
+      };
+
+      // 計算統計數據
+      const totalCount = results.length;
+      const correctCount = results.filter(r => r.correct).length;
+      const incorrectCount = totalCount - correctCount;
+      const accuracyRate = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+
+      // 根據正確率給予貼切又溫暖的繁體中文鼓勵語
+      const getMotivationalMessage = () => {
+        if (accuracyRate === 100) return "太完美了！拿到 100 分滿分！真是個聰明的小神童！💯";
+        if (accuracyRate >= 80) return "表現非常棒！再加把勁，下次一定能拿到滿分喔！🌟";
+        if (accuracyRate >= 60) return "很不錯的嘗試！繼續練習，你會寫得越來越好！👍";
+        return "沒關係，我們再多聽幾次、多寫幾次，一定會大進步的！❤️";
       };
 
       return (
@@ -636,7 +672,8 @@
                 </button>
               </div>
 
-              <div className="p-6 bg-white border-t border-slate-100 flex gap-4">
+              {/* 底部按鈕：看答案 -> [正確 / 錯誤評估] -> 自動前進 */}
+              <div className="p-6 bg-white border-t border-slate-100 flex gap-4 min-h-[92px]">
                 {!showAnswer ? (
                   <button 
                     onClick={() => setShowAnswer(true)}
@@ -645,41 +682,144 @@
                     <IconEye /> 看答案
                   </button>
                 ) : (
-                  <button 
-                    onClick={handleNext}
-                    className="flex-1 py-4.5 bg-indigo-500 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-md animate-in fade-in slide-in-from-bottom-2 active:scale-95 transition-all text-base"
-                  >
-                    <span>{currentIdx < quizList.length - 1 ? '下一題' : '完成練習'}</span>
-                    <IconChevronRight />
-                  </button>
+                  <div className="flex-1 flex gap-3.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
+                    <button 
+                      onClick={() => handleRecord(true)}
+                      className="flex-1 py-4.5 bg-emerald-600 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all text-base hover:bg-emerald-700"
+                    >
+                      <IconCheck /> 正確
+                    </button>
+                    <button 
+                      onClick={() => handleRecord(false)}
+                      className="flex-1 py-4.5 bg-rose-600 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all text-base hover:bg-rose-700"
+                    >
+                      <IconCross /> 錯誤
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
           )}
 
-          {/* Step 4: 結算頁面 */}
+          {/* Step 4: 結算統計報告頁面 (可上下滑動以閱讀詳細答題報告) */}
           {step === 'result' && (
-            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-white animate-in zoom-in duration-300">
-              <div className="mb-8 relative">
-                <div className="absolute inset-0 bg-yellow-400 rounded-full blur-3xl opacity-10 animate-pulse"></div>
-                <IconTrophy />
-              </div>
-              <h2 className="text-3xl font-black text-slate-800 mb-3">練習完成！</h2>
-              <p className="text-slate-400 mb-10 font-bold">你做得太棒了！繼續加油喔！</p>
-              
-              <div className="flex flex-col gap-3.5 w-full max-w-xs">
-                <button 
-                  onClick={startQuiz}
-                  className="w-full py-4.5 bg-indigo-500 text-white rounded-2xl font-bold shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all text-base"
-                >
-                  <IconRotateCcw /> 再練習一次
-                </button>
-                <button 
-                  onClick={() => setStep('role')}
-                  className="w-full py-4.5 bg-slate-50 text-slate-500 rounded-2xl font-bold active:scale-95 transition-all text-base hover:bg-slate-100"
-                >
-                  返回首頁
-                </button>
+            <div className="flex-1 flex flex-col overflow-y-auto bg-slate-50 animate-in zoom-in duration-300">
+              <div className="max-w-2xl mx-auto w-full p-6 space-y-6">
+                
+                {/* 成果與獎盃卡 */}
+                <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm text-center flex flex-col items-center">
+                  <div className="mb-4 relative">
+                    <div className="absolute inset-0 bg-yellow-400 rounded-full blur-3xl opacity-10 animate-pulse"></div>
+                    <IconTrophy />
+                  </div>
+                  <h2 className="text-3xl font-black text-slate-800 mb-1">練習成果</h2>
+                  <p className="text-rose-500 font-extrabold text-sm tracking-wider uppercase mb-3">
+                    {role === 'G1' ? 'Ian' : 'Hugo'} 的聽寫統計報告
+                  </p>
+                  <p className="text-slate-500 text-sm max-w-md font-bold leading-relaxed">
+                    {getMotivationalMessage()}
+                  </p>
+                </div>
+
+                {/* 四宮格儀表板統計數字 */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs text-center">
+                    <span className="text-slate-400 text-xs font-bold block mb-1">總聽寫詞數</span>
+                    <span className="text-3xl font-black text-slate-700">{totalCount}</span>
+                  </div>
+                  <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs text-center">
+                    <span className="text-emerald-500 text-xs font-bold block mb-1">答對詞數</span>
+                    <span className="text-3xl font-black text-emerald-600">{correctCount}</span>
+                  </div>
+                  <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs text-center">
+                    <span className="text-rose-500 text-xs font-bold block mb-1">答錯詞數</span>
+                    <span className="text-3xl font-black text-rose-600">{incorrectCount}</span>
+                  </div>
+                  <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs text-center">
+                    <span className="text-indigo-500 text-xs font-bold block mb-1">正確率</span>
+                    <span className="text-3xl font-black text-indigo-600">{accuracyRate}%</span>
+                  </div>
+                </div>
+
+                {/* 詳細答題清單：🟢 答對的詞彙 & 🔴 需要再練習的詞彙 */}
+                <div className="space-y-4">
+                  
+                  {/* 答錯需要再練習的詞彙清單（最優先呈現以供訂正） */}
+                  {incorrectCount > 0 && (
+                    <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
+                      <div className="flex items-center gap-2 mb-4 text-rose-600">
+                        <div className="w-6 h-6 rounded-full bg-rose-50 flex items-center justify-center flex-shrink-0">
+                          <IconCross />
+                        </div>
+                        <h3 className="font-extrabold text-base">需要再練習的詞彙 ({incorrectCount})</h3>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {results.filter(r => !r.correct).map((item, idx) => (
+                          <div key={idx} className="flex items-center justify-between p-3.5 bg-rose-50/50 rounded-xl border border-rose-100">
+                            <div className="flex flex-col">
+                              <span className="text-slate-800 font-extrabold text-lg tracking-wide tianzi-font">{item.word}</span>
+                              <span className="text-slate-400 text-xs font-bold font-sans mt-0.5">{item.zhuyin.join(' ')}</span>
+                            </div>
+                            <button 
+                              onClick={() => speak(item.speech || item.word)}
+                              className="w-10 h-10 bg-white border border-rose-200 text-rose-500 rounded-full flex items-center justify-center shadow-xs active:scale-90 hover:bg-rose-50 transition-colors"
+                              title="播放發音供孩子重新訂正"
+                            >
+                              <IconVolume2 className="w-5 h-5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 答對的詞彙清單 */}
+                  {correctCount > 0 && (
+                    <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
+                      <div className="flex items-center gap-2 mb-4 text-emerald-600">
+                        <div className="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                          <IconCheck />
+                        </div>
+                        <h3 className="font-extrabold text-base">答對的詞彙 ({correctCount})</h3>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {results.filter(r => r.correct).map((item, idx) => (
+                          <div key={idx} className="flex items-center justify-between p-3.5 bg-emerald-50/30 rounded-xl border border-emerald-100">
+                            <div className="flex flex-col">
+                              <span className="text-slate-800 font-extrabold text-lg tracking-wide tianzi-font">{item.word}</span>
+                              <span className="text-slate-400 text-xs font-bold font-sans mt-0.5">{item.zhuyin.join(' ')}</span>
+                            </div>
+                            <button 
+                              onClick={() => speak(item.speech || item.word)}
+                              className="w-10 h-10 bg-white border border-emerald-200 text-emerald-600 rounded-full flex items-center justify-center shadow-xs active:scale-90 hover:bg-emerald-50 transition-colors"
+                              title="播放發音"
+                            >
+                              <IconVolume2 className="w-5 h-5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                </div>
+
+                {/* 底部重來按鈕 */}
+                <div className="flex flex-col gap-3 pt-4">
+                  <button 
+                    onClick={startQuiz}
+                    className="w-full py-4.5 bg-indigo-500 text-white rounded-2xl font-bold shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all text-base"
+                  >
+                    <IconRotateCcw /> 再挑戰一次
+                  </button>
+                  <button 
+                    onClick={() => setStep('role')}
+                    className="w-full py-4.5 bg-white border border-slate-200 text-slate-500 rounded-2xl font-bold active:scale-95 transition-all text-base hover:bg-slate-50"
+                  >
+                    返回首頁
+                  </button>
+                </div>
+
               </div>
             </div>
           )}
