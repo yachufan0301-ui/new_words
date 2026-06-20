@@ -1,836 +1,313 @@
-```html
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>圈詞好棒棒 - 國語直式注音聽寫練習</title>
-  
-  <!-- 載入 Google 繁體中文標準字型與 Tailwind CSS -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- 載入 React, ReactDOM 及 Babel 解析器 -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <style>
-    body {
-      font-family: 'Noto Sans TC', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-    /* 經典新細明體練習格專用 */
-    .tianzi-font {
-      font-family: "PMingLiU", "MingLiU", "新細明體", serif;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 圈詞好棒棒</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- Babel for JSX compilation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js" crossorigin></script>
+    <style>
+        /* 避免使用者誤選取文字影響作答 */
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
 </head>
-<body class="bg-[#f8fafc]">
+<body class="bg-blue-50">
+    <div id="root"></div>
 
-  <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
 
-  <!-- React 應用程式核心邏輯與 UI 渲染 -->
-  <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+        // --- 資料庫 ---
+        const quizData = {
+          ian: { 
+            id: 'ian', title: 'Ian', 
+            sections: {
+              'G1 L7 圈詞': [
+                { word: '蛋糕', zhuyin: ['ㄉㄢˋ', 'ㄍㄠ'] },
+                { word: '漂亮', zhuyin: ['ㄆㄧㄠˋ', 'ㄌㄧㄤˋ'] },
+                { word: '老師', zhuyin: ['ㄌㄠˇ', 'ㄕ'] },
+                { word: '感謝', zhuyin: ['ㄍㄢˇ', 'ㄒㄧㄝˋ'] },
+                { word: '笑臉', zhuyin: ['ㄒㄧㄠˋ', 'ㄌㄧㄢˇ'] },
+                { word: '一張', zhuyin: ['ㄧˋ', 'ㄓㄤ'] },
+                { word: '祝福', zhuyin: ['ㄓㄨˋ', 'ㄈㄨˊ'] },
+                { word: '一顆', zhuyin: ['ㄧˋ', 'ㄎㄜ'] },
+                { word: '畫畫', zhuyin: ['ㄏㄨㄚˋ', 'ㄏㄨㄚˋ'] }
+              ],
+              'G1 L8 圈詞': [
+                { word: '敬上', zhuyin: ['ㄐㄧㄥˋ', 'ㄕㄤˋ'] },
+                { word: '長大', zhuyin: ['ㄓㄤˇ', 'ㄉㄚˋ'] },
+                { word: '很久', zhuyin: ['ㄏㄣˇ', 'ㄐㄧㄡˇ'] },
+                { word: '埋進', zhuyin: ['ㄇㄞˊ', 'ㄐㄧㄣˋ'] },
+                { word: '地方', zhuyin: ['ㄉㄧˋ', 'ㄈㄤ'] },
+                { word: '果子', zhuyin: ['ㄍㄨㄛˇ', 'ㄗ˙'] },
+                { word: '秋天', zhuyin: ['ㄑㄧㄡ', 'ㄊㄧㄢ'] },
+                { word: '卡片', zhuyin: ['ㄎㄚˇ', 'ㄆㄧㄢˋ'] },
+                { word: '松鼠', zhuyin: ['ㄙㄨㄥ', 'ㄕㄨˇ'] }
+              ],
+              'G1 L9 圈詞': [
+                { word: '當成', zhuyin: ['ㄉㄤˋ', 'ㄔㄥˊ'] },
+                { word: '一樣', zhuyin: ['ㄧˊ', 'ㄧㄤˋ'] },
+                { word: '學校', zhuyin: ['ㄒㄩㄝˊ', 'ㄒㄧㄠˋ'] },
+                { word: '一邊', zhuyin: ['ㄧˋ', 'ㄅㄧㄢ'] },
+                { word: '工作', zhuyin: ['ㄍㄨㄥ', 'ㄗㄨㄛˋ'] },
+                { word: '校園', zhuyin: ['ㄒㄧㄠˋ', 'ㄩㄢˊ'] },
+                { word: '早上', zhuyin: ['ㄗㄠˇ', 'ㄕㄤˋ'] },
+                { word: '寶貝', zhuyin: ['ㄅㄠˇ', 'ㄅㄟˋ'] },
+                { word: '奶奶', zhuyin: ['ㄋㄞˇ', 'ㄋㄞ˙'] }
+              ],
+              'G1 L10 圈詞': [
+                { word: '青蛙', zhuyin: ['ㄑㄧㄥ', 'ㄨㄚ'] },
+                { word: '裝不下', zhuyin: ['ㄓㄨㄤ', 'ㄅㄨˊ', 'ㄒㄧㄚˋ'] },
+                { word: '世界', zhuyin: ['ㄕˋ', 'ㄐㄧㄝˋ'] },
+                { word: '幾天', zhuyin: ['ㄐㄧˇ', 'ㄊㄧㄢ'] },
+                { word: '一窪', zhuyin: ['ㄧˋ', 'ㄨㄚ'] },
+                { word: '說大話', zhuyin: ['ㄕㄨㄛ', 'ㄉㄚˋ', 'ㄏㄨㄚˋ'] },
+                { word: '肚子', zhuyin: ['ㄉㄨˋ', 'ㄗ˙'] },
+                { word: '東西', zhuyin: ['ㄉㄨㄥ', 'ㄒㄧ˙'] },
+                { word: '睡覺', zhuyin: ['ㄕㄨㄟˋ', 'ㄐㄧㄠˋ'] },
+                { word: '除了', zhuyin: ['ㄔㄨˊ', 'ㄌㄜ˙'] },
+                { word: '一隻', zhuyin: ['ㄧˋ', 'ㄓ'] }
+              ],
+              'G1 L11 圈詞': [
+                { word: '外面', zhuyin: ['ㄨㄞˋ', 'ㄇㄧㄢˋ'] },
+                { word: '鴨子', zhuyin: ['ㄧㄚ', 'ㄗ˙'] },
+                { word: '星星', zhuyin: ['ㄒㄧㄥ', '˙ㄒㄧㄥ'] },
+                { word: '奇怪', zhuyin: ['ㄑㄧˊ', 'ㄍㄨㄞˋ'] },
+                { word: '吃光', zhuyin: ['ㄔ', 'ㄍㄨㄤ'] },
+                { word: '告訴', zhuyin: ['ㄍㄠˋ', 'ㄙㄨˋ'] },
+                { word: '快樂', zhuyin: ['ㄎㄨㄞˋ', 'ㄌㄜˋ'] },
+                { word: '不見', zhuyin: ['ㄅㄨˊ', 'ㄐㄧㄢˋ'] },
+                { word: '波紋', zhuyin: ['ㄅㄛ', 'ㄨㄣˊ'] },
+                { word: '一圈', zhuyin: ['ㄧˋ', 'ㄑㄩㄢ'] },
+                { word: '池塘', zhuyin: ['ㄔˊ', 'ㄊㄤˊ'] },
+                { word: '許多', zhuyin: ['ㄒㄩˇ', 'ㄉㄨㄛ'] }
+              ],
+              'G1 L12 圈詞': [
+                { word: '加油', zhuyin: ['ㄐㄧㄚ', 'ㄧㄡˊ'] },
+                { word: '辛苦', zhuyin: ['ㄒㄧㄣ', 'ㄎㄨˇ'] },
+                { word: '地瓜苗', zhuyin: ['ㄉㄧˋ', 'ㄍㄨㄚ', 'ㄇㄧㄠˊ'] },
+                { word: '種田', zhuyin: ['ㄓㄨㄥˋ', 'ㄊㄧㄢˊ'] },
+                { word: '小豬', zhuyin: ['ㄒㄧㄠˇ', 'ㄓㄨ'] },
+                { word: '一半', zhuyin: ['ㄧˊ', 'ㄅㄢˋ'] },
+                { word: '不止', zhuyin: ['ㄅㄨˋ', 'ㄓˇ'] },
+                { word: '分享', zhuyin: ['ㄈㄣ', 'ㄒㄧㄤˇ'] },
+                { word: '地瓜葉', zhuyin: ['ㄉㄧˋ', 'ㄍㄨㄚ', 'ㄧㄝˋ'] },
+                { word: '收成', zhuyin: ['ㄕㄡ', 'ㄔㄥˊ'] },
+                { word: '不能', zhuyin: ['ㄅㄨˋ', 'ㄋㄥˊ'] }
+              ]
+            }
+          },
+          hugo: { 
+            id: 'hugo', title: 'Hugo', 
+            sections: {
+              'L7 圈詞': [{ word: '攜手', zhuyin: ['ㄒㄧ', 'ㄕㄡˇ'] }, { word: '惡化', zhuyin: ['ㄜˋ', 'ㄏㄨㄚˋ'] }, { word: '導致', zhuyin: ['ㄉㄠˇ', 'ㄓˋ'] }, { word: '變遷', zhuyin: ['ㄅㄧㄢˋ', 'ㄑㄧㄢ'] }, { word: '平均', zhuyin: ['ㄆㄧㄥˊ', 'ㄐㄩㄣ'] }, { word: '分配', zhuyin: ['ㄈㄣ', 'ㄆㄟˋ'] }, { word: '饑荒', zhuyin: ['ㄐㄧ', 'ㄏㄨㄤ'] }, { word: '鍵盤', zhuyin: ['ㄐㄧㄢˋ', 'ㄆㄢˊ'] }, { word: '傳輸', zhuyin: ['ㄔㄨㄢˊ', 'ㄕㄨ'] }, { word: '移動', zhuyin: ['ㄧˊ', 'ㄉㄨㄥˋ'] }, { word: '足跡', zhuyin: ['ㄗㄨˊ', 'ㄐㄧ'] }],
+              'L8 圈詞': [{ word: '輕而易舉', zhuyin: ['ㄑㄧㄥ', 'ㄦˊ', 'ㄧˋ', 'ㄐㄩˇ'] }, { word: '研究', zhuyin: ['ㄧㄢˊ', 'ㄐㄧㄡˋ'] }, { word: '肢體', zhuyin: ['ㄓ', 'ㄊㄧˇ'] }, { word: '身懷絕技', zhuyin: ['ㄕㄣ', 'ㄏㄨㄞˊ', 'ㄐㄩㄝˊ', 'ㄐㄧˋ'] }, { word: '輕易', zhuyin: ['ㄑㄧㄥ', 'ㄧˋ'] }, { word: '構造', zhuyin: ['ㄍㄡˋ', 'ㄗㄠˋ'] }, { word: '腳趾', zhuyin: ['ㄐㄧㄠˇ', 'ㄓˇ'] }, { word: '得天獨厚', zhuyin: ['ㄉㄜˊ', 'ㄊㄧㄢ', 'ㄉㄨˊ', 'ㄌㄧㄥˋ'] }, { word: '看家本領', zhuyin: ['ㄎㄢ', 'ㄐㄧㄚ', 'ㄅㄣˇ', 'ㄌㄧㄥˇ'] }, { word: '與眾不同', zhuyin: ['ㄩˇ', 'ㄓㄨㄥˋ', 'ㄅㄨˋ', 'ㄊㄨㄥˊ'] }, { word: '壁虎', zhuyin: ['ㄅㄧˋ', 'ㄏㄨˇ'] }, { word: '絕技', zhuyin: ['ㄐㄩㄝˊ', 'ㄐㄧˋ'] }, { word: '易如反掌', zhuyin: ['ㄧˋ', 'ㄖㄨˊ', 'ㄈㄢˇ', 'ㄓㄤˇ'] }],
+              'L9 圈詞': [{ word: '催生', zhuyin: ['ㄘㄨㄟ', 'ㄕㄥ'] }, { word: '吸引', zhuyin: ['ㄒㄧ', 'ㄧㄣˇ'] }, { word: '嚮往', zhuyin: ['ㄒㄧㄤˋ', 'ㄨㄤˇ'] }, { word: '大富翁', zhuyin: ['ㄉㄚˋ', 'ㄈㄨˋ', 'ㄨㄥ'] }, { word: '太空總署', zhuyin: ['ㄊㄞˋ', 'ㄎㄨㄥ', 'ㄗㄨㄥˇ', 'ㄕㄨˇ'] }, { word: '探測', zhuyin: ['ㄊㄢˋ', 'ㄘㄜˋ'] }, { word: '嘗試', zhuyin: ['ㄔㄤˊ', 'ㄕˋ'] }, { word: '津津樂道', zhuyin: ['ㄐㄧㄣ', 'ㄐㄧㄣ', 'ㄌㄜˋ', 'ㄉㄠˋ'] }, { word: '阿姆斯壯', zhuyin: ['ㄚ', 'ㄇㄨˇ', 'ㄙ', 'ㄓㄨㄤˋ'] }, { word: '不僅', zhuyin: ['ㄅㄨˋ', 'ㄐㄧㄣˇ'] }],
+              'L10 圈詞': [{ word: '遺憾', zhuyin: ['ㄧˊ', 'ㄏㄢˋ'] }, { word: '耗盡', zhuyin: ['ㄏㄠˋ', 'ㄐㄧㄣˋ'] }, { word: '旱災', zhuyin: ['ㄏㄢˋ', 'ㄗㄞ'] }, { word: '水災', zhuyin: ['ㄕㄟˇ', 'ㄗㄞ'] }, { word: '萬丈', zhuyin: ['ㄨㄢˋ', 'ㄓㄤˋ'] }, { word: '寬廣', zhuyin: ['ㄎㄨㄢ', 'ㄍㄨㄤˇ'] }, { word: '一望無際', zhuyin: ['ㄧˊ', 'ㄨㄤˋ', 'ㄨˊ', 'ㄐㄧˋ'] }, { word: '禁不住', zhuyin: ['ㄐㄧㄣ', 'ㄅㄨˊ', 'ㄓㄨˋ'] }, { word: '打滾', zhuyin: ['ㄉㄚˇ', 'ㄍㄨㄣˇ'] }, { word: '忽然', zhuyin: ['ㄏㄨ', 'ㄖㄢˊ'] }, { word: '自豪', zhuyin: ['ㄗˋ', 'ㄏㄠˊ'] }],
+              'L11 圈詞': [{ word: '孤單', zhuyin: ['ㄍㄨ', 'ㄉㄢ'] }, { word: '淚水', zhuyin: ['ㄌㄟˋ', 'ㄕㄨㄟˇ'] }, { word: '依舊', zhuyin: ['ㄧ', 'ㄐㄧㄡˋ'] }, { word: '是否', zhuyin: ['ㄕˋ', 'ㄈㄡˇ'] }, { word: '浮現', zhuyin: ['ㄈㄨˊ', 'ㄒㄧㄢˋ'] }, { word: '映照', zhuyin: ['ㄧㄥˋ', 'ㄓㄠˋ'] }, { word: '冰霜', zhuyin: ['ㄅㄧㄥ', 'ㄕㄨㄤ'] }, { word: '吳剛', zhuyin: ['ㄨˊ', 'ㄍㄤ'] }, { word: '嫦娥', zhuyin: ['ㄔㄤˊ', 'ㄜˊ'] }, { word: '皎潔', zhuyin: ['ㄐㄧㄠˇ', 'ㄐㄧㄝˊ'] }],
+              'L12 圈詞': [{ word: '掀翻', zhuyin: ['ㄒㄧㄢ', 'ㄈㄢ'] }, { word: '呼風喚雨', zhuyin: ['ㄏㄨ', 'ㄈㄥ', 'ㄏㄨㄢˋ', 'ㄩˇ'] }, { word: '金箍棒', zhuyin: ['ㄐㄧㄣ', 'ㄍㄨ', 'ㄅㄤˋ'] }, { word: '筋斗雲', zhuyin: ['ㄐㄧㄣ', 'ㄉㄡˇ', 'ㄩㄣˊ'] }, { word: '乖乖', zhuyin: ['ㄍㄨㄞ', 'ㄍㄨㄞ'] }, { word: '壓住', zhuyin: ['ㄧㄚ', 'ㄓㄨˋ'] }, { word: '齊天大聖', zhuyin: ['ㄑㄧˊ', 'ㄊㄧㄢ', 'ㄉㄚˋ', 'ㄕㄥˋ'] }, { word: '掏出', zhuyin: ['ㄊㄠ', 'ㄔㄨ'] }, { word: '咒語', zhuyin: ['ㄓㄡˋ', 'ㄩˇ'] }, { word: '修行', zhuyin: ['ㄒㄧㄡ', 'ㄒㄧㄥˊ'] }]
+            }
+          }
+        };
 
-    // 自製精美向量圖示組件（100% 符合 React className 規範）
-    const IconVolume2 = ({ className = "w-7 h-7" }) => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
-        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-      </svg>
-    );
+        const ZhuyinBlock = ({ text }) => {
+          const cleanText = text.trim();
+          const tones = ['ˊ', 'ˇ', 'ˋ', '˙'];
+          let tone = '';
+          const chars = [];
 
-    const IconChevronRight = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-        <polyline points="9 18 15 12 9 6"></polyline>
-      </svg>
-    );
+          // 分離聲調與注音符號
+          for (let char of cleanText) {
+            if (tones.includes(char)) {
+              tone = char;
+            } else {
+              chars.push(char);
+            }
+          }
 
-    const IconRotateCcw = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-        <polyline points="3 3 3 8 8 8"></polyline>
-      </svg>
-    );
+          return (
+            <div className="flex flex-col justify-between h-20 w-8 relative no-select">
+              {chars.map((char, index) => {
+                const isFirst = index === 0;
+                const isLast = index === chars.length - 1;
 
-    const IconTrophy = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-20 h-20 text-yellow-400">
-        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-        <path d="M4 22h16"></path>
-        <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"></path>
-        <path d="M12 2a6 6 0 0 1 6 6v3.5c0 2.5-2 4.5-4.5 4.5h-3C7.9 16 6 14 6 11.5V8a6 6 0 0 1 6-6z"></path>
-      </svg>
-    );
+                return (
+                  <div key={index} className="relative flex justify-center items-center flex-1 leading-none">
+                    {/* 注音符號本體 */}
+                    <span className="font-bold text-blue-900 text-3xl select-none">{char}</span>
 
-    const IconBookOpen = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-      </svg>
-    );
+                    {/* 規則 1：一般聲調（ˊ、ˇ、ˋ）強制顯示在最後一個注音符號的右側 */}
+                    {isLast && tone && tone !== '˙' && (
+                      <span className="absolute left-full ml-2 text-2xl font-bold text-blue-900 leading-none select-none">
+                        {tone}
+                      </span>
+                    )}
 
-    const IconEye = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-        <circle cx="12" cy="12" r="3"></circle>
-      </svg>
-    );
-
-    const IconArrowLeft = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-        <line x1="19" y1="12" x2="5" y2="12"></line>
-        <polyline points="12 19 5 12 12 5"></polyline>
-      </svg>
-    );
-
-    const IconSettings = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-        <circle cx="12" cy="12" r="3"></circle>
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-      </svg>
-    );
-
-    const IconCamera = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-        <circle cx="12" cy="13" r="4"></circle>
-      </svg>
-    );
-
-    const IconCheck = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-        <polyline points="20 6 9 17 4 12"></polyline>
-      </svg>
-    );
-
-    const IconCross = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
-    );
-
-    // 預設 Ian 頭像（Q版小男孩插圖 SVG）
-    const DefaultIanAvatar = () => (
-      <svg viewBox="0 0 100 100" className="w-full h-full bg-indigo-100 p-2 text-indigo-600">
-        <circle cx="50" cy="45" r="20" fill="#fbcfe8" />
-        <path d="M30 45c0-15 10-25 20-25s20 10 20 25c0 3-1 6-2 8H32c-1-2-2-5-2-8z" fill="#4f46e5" />
-        <circle cx="43" cy="43" r="2.5" fill="#1e1b4b" />
-        <circle cx="57" cy="43" r="2.5" fill="#1e1b4b" />
-        <path d="M46 52 q4 3 8 0" stroke="#1e1b4b" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-        <path d="M25 85c0-10 10-15 25-15s25 5 25 15" fill="#6366f1" />
-      </svg>
-    );
-
-    // 預設 Hugo 頭像（帥氣大男孩插圖 SVG）
-    const DefaultHugoAvatar = () => (
-      <svg viewBox="0 0 100 100" className="w-full h-full bg-rose-100 p-2 text-rose-600">
-        <circle cx="50" cy="45" r="20" fill="#fecdd3" />
-        <path d="M25 40c2-12 12-22 25-22s23 10 25 22c0 3-2 6-3 8H28c-1-2-2-5-3-8z" fill="#e11d48" />
-        <circle cx="42" cy="43" r="2.5" fill="#4c0519" />
-        <circle cx="58" cy="43" r="2.5" fill="#4c0519" />
-        <path d="M45 53 q5 2 10 0" stroke="#4c0519" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-        <path d="M25 85c0-10 10-15 25-15s25 5 25 15" fill="#f43f5e" />
-      </svg>
-    );
-
-    // 官方標準詞庫 + 真實生字對照表 (Hugo L10 詞庫全新更新，廣注音修正、舌苔發音優化)
-    const WORD_DATABASE = {
-      G1: {
-        7: [
-          { word: '還有', zhuyin: ['ㄏㄞˊ', 'ㄧㄡˇ'] },
-          { word: '還書', zhuyin: ['ㄏㄨㄢˊ', 'ㄕㄨ'], speech: '環書' }, 
-          { word: '漂亮', zhuyin: ['ㄆㄧㄠˋ', 'ㄌㄧㄤˋ'] }, 
-          { word: '漂流', zhuyin: ['ㄆㄧㄠ', 'ㄌㄧㄡˊ'], speech: '飄流' }, 
-          { word: '好啊', zhuyin: ['ㄏㄠˇ', 'ㄚ˙'] },
-          { word: '畫畫', zhuyin: ['ㄏㄨㄚˋ', 'ㄏㄨㄚˋ'] },
-          { word: '漫畫', zhuyin: ['ㄇㄢˋ', 'ㄏㄨㄚˋ'] }
-        ],
-        8: [
-          { word: '松鼠', zhuyin: ['ㄙㄨㄥ', 'ㄕㄨˇ'] },
-          { word: '卡片', zhuyin: ['ㄎㄚˇ', 'ㄆㄧㄢˋ'] },
-          { word: '秋天', zhuyin: ['ㄑㄧㄡ', 'ㄊㄧㄢ'] },
-          { word: '果子', zhuyin: ['ㄍㄨㄛˇ', 'ㄗ˙'] },
-          { word: '地方', zhuyin: ['ㄉㄧˋ', 'ㄈㄤ'] },
-          { word: '長大', zhuyin: ['ㄓㄤˇ', 'ㄉㄚˋ'], speech: '掌大' }, 
-          { word: '敬上', zhuyin: ['ㄐㄧㄥˋ', 'ㄕㄤˋ'] }
-        ],
-        9: [
-          { word: '奶奶', zhuyin: ['ㄋㄞˇ', 'ㄋㄞ˙'] },
-          { word: '寶貝', zhuyin: ['ㄅㄠˇ', 'ㄅㄟˋ'] },
-          { word: '早上', zhuyin: ['ㄗㄠˇ', 'ㄕㄤ˙'] },
-          { word: '校園', zhuyin: ['ㄒㄧㄠˋ', 'ㄩㄢˊ'] },
-          { word: '工作', zhuyin: ['ㄍㄨㄥ', 'ㄗㄨㄛˋ'] },
-          { word: '一邊', zhuyin: ['ㄧˋ', 'ㄅㄧㄢ'] },
-          { word: '學校', zhuyin: ['ㄒㄩㄝˊ', 'ㄒㄩㄝˋ'] }, 
-          { word: '一樣', zhuyin: ['ㄧˊ', 'ㄧㄤˋ'] },
-          { word: '當成', zhuyin: ['ㄉㄤ', 'ㄔㄥˊ'] }
-        ],
-        10: [
-          { word: '青蛙', zhuyin: ['ㄑㄧㄥ', 'ㄨㄚ'] },
-          { word: '睡覺', zhuyin: ['ㄕㄨㄟˋ', 'ㄐㄧㄠˋ'] },
-          { word: '東西', zhuyin: ['ㄉㄨㄥ', 'ㄒㄧ'] },
-          { word: '肚子', zhuyin: ['ㄉㄨˋ', 'ㄗ˙'] },
-          { word: '世界', zhuyin: ['ㄕˋ', 'ㄐㄧㄝˋ'] }
-        ],
-        11: [
-          { word: '星星', zhuyin: ['ㄒㄧㄥ', 'ㄒㄧㄥ˙'] },
-          { word: '鴨子', zhuyin: ['ㄧㄚ', 'ㄗ˙'] },
-          { word: '外面', zhuyin: ['ㄨㄞˋ', 'ㄇㄧㄢˋ'] },
-          { word: '許多', zhuyin: ['ㄒㄩˇ', 'ㄉㄨㄛ'] },
-          { word: '池塘', zhuyin: ['ㄔˊ', 'ㄊㄤˊ'] },
-          { word: '波紋', zhuyin: ['ㄅㄛ', 'ㄨㄣˊ'] },
-          { word: '不見', zhuyin: ['ㄅㄨˊ', 'ㄐㄧㄢˋ'] },
-          { word: '快樂', zhuyin: ['ㄎㄨㄞˋ', 'ㄌㄜˋ'] },
-          { word: '告訴', zhuyin: ['ㄍㄠˋ', 'ㄙㄨˋ'] },
-          { word: '奇怪', zhuyin: ['ㄑㄧˊ', 'ㄍㄨㄞˋ'] }
-        ],
-        12: [
-          { word: '不止', zhuyin: ['ㄅㄨˋ', 'ㄓˇ'] },
-          { word: '一半', zhuyin: ['ㄧˊ', 'ㄅㄢˋ'] },
-          { word: '種田', zhuyin: ['ㄓㄨㄥˋ', 'ㄊㄧㄢˊ'] },
-          { word: '辛苦', zhuyin: ['ㄒㄧㄣ', 'ㄎㄨˇ'] },
-          { word: '加油', zhuyin: ['ㄐㄧㄚ', 'ㄧㄡˊ'] },
-          { word: '不能', zhuyin: ['ㄅㄨˋ', 'ㄋㄥˊ'] },
-          { word: '收成', zhuyin: ['ㄕㄡ', 'ㄔㄥˊ'] },
-          { word: '分享', zhuyin: ['ㄈㄣ', 'ㄒㄧㄤˇ'] }
-        ]
-      },
-      G4: {
-        7: [
-          { word: '足跡', zhuyin: ['ㄗㄨˊ', 'ㄐㄧ'] }, 
-          { word: '與眾不同', zhuyin: ['ㄩˇ', 'ㄓㄨㄥˋ', 'ㄅㄨˋ', 'ㄊㄨㄥˊ'] },
-          { word: '得天獨厚', zhuyin: ['ㄉㄜˊ', 'ㄊㄧㄢ', 'ㄉㄨˊ', 'ㄏㄡˋ'] },
-          { word: '深謀遠慮', zhuyin: ['ㄕㄣ', 'ㄇㄡˊ', 'ㄩㄢˇ', 'ㄌㄩˋ'] }
-        ],
-        8: [
-          { word: '分配', zhuyin: ['ㄈㄣ', 'ㄆㄟˋ'] },
-          { word: '惡化', zhuyin: ['ㄜˋ', 'ㄏㄨㄚˋ'] },
-          { word: '萬丈深淵', zhuyin: ['ㄨㄢˋ', 'ㄓㄤˋ', 'ㄕㄣ', 'ㄩㄢ'] },
-          { word: '自立門戶', zhuyin: ['ㄗˋ', 'ㄌㄧˋ', 'ㄇㄣˊ', 'ㄏㄨˋ'] }
-        ],
-        9: [
-          { word: '豁然開朗', zhuyin: ['ㄏㄨㄛˋ', 'ㄖㄢˊ', 'ㄎㄞ', 'ㄌㄤˇ'] },
-          { word: '依依不捨', zhuyin: ['ㄧ', 'ㄧ', 'ㄅㄨˋ', 'ㄕㄜˇ'] },
-          { word: '刻苦耐勞', zhuyin: ['ㄎㄜˋ', 'ㄎㄨˇ', 'ㄋㄞˋ', 'ㄌㄠˊ'] }
-        ],
-        10: [
-          // Hugo 第 10 課全新詞彙：廣注音精確校正為 ㄍㄨㄤˇ，舌苔發音校正一聲
-          { word: '遺憾', zhuyin: ['ㄧˊ', 'ㄏㄢˋ'] },
-          { word: '耗盡', zhuyin: ['ㄏㄠˋ', 'ㄐㄧㄣˋ'] },
-          { word: '旱災', zhuyin: ['ㄏㄢˋ', 'ㄗㄞ'] },
-          { word: '水災', zhuyin: ['ㄕㄨㄟˇ', 'ㄗㄞ'] },
-          { word: '萬丈', zhuyin: ['ㄨㄢˋ', 'ㄓㄤˋ'] },
-          { word: '寬廣', zhuyin: ['ㄎㄨㄢ', 'ㄍㄨㄤˇ'] }, 
-          { word: '一望無際', zhuyin: ['ㄧ', 'ㄨㄤˋ', 'ㄨˊ', 'ㄐㄧˋ'] },
-          { word: '禁不住', zhuyin: ['ㄐㄧㄣ', 'ㄅㄨˊ', 'ㄓㄨˋ'], speech: '斤不住' }, // 教育部標準音「ㄐㄧㄣ」
-          { word: '打滾', zhuyin: ['ㄉㄚˇ', 'ㄍㄨㄣˇ'] },
-          { word: '忽然', zhuyin: ['ㄏㄨ', 'ㄖㄢˊ'] },
-          { word: '自豪', zhuyin: ['ㄗˋ', 'ㄏㄠˊ'] },
-          { word: '無妄之災', zhuyin: ['ㄨˊ', 'ㄨㄤˋ', 'ㄓ', 'ㄗㄞ'] },
-          { word: '集思廣益', zhuyin: ['ㄐㄧˊ', 'ㄙ', 'ㄍㄨㄤˇ', 'ㄧˋ'] }, 
-          { word: '不著邊際', zhuyin: ['ㄅㄨˋ', 'ㄓㄨㄛˊ', 'ㄅㄧㄢ', 'ㄐㄧˋ'] }, 
-          { word: '不遺餘力', zhuyin: ['ㄅㄨˋ', 'ㄧˊ', 'ㄩˊ', 'ㄌㄧˋ'] },
-          { word: '青苔', zhuyin: ['ㄑㄧㄥ', 'ㄊㄞˊ'] },
-          { word: '舌苔', zhuyin: ['ㄕㄜˊ', 'ㄊㄞ'], speech: '舌胎' } // 語音合成朗讀「舌胎」（ㄕㄜˊ ㄊㄞ一聲），字面維持標準舌苔
-        ],
-        11: [
-          { word: '破釜沉舟', zhuyin: ['ㄆㄛˋ', 'ㄈㄨˇ', 'ㄔㄣˊ', 'ㄓㄡ'] },
-          { word: '望梅止渴', zhuyin: ['ㄨㄤˋ', 'ㄇㄟˊ', 'ㄓˇ', 'ㄎㄜˇ'] },
-          { word: '紙上談兵', zhuyin: ['ㄓˇ', 'ㄕㄤˋ', 'ㄊㄢˊ', 'ㄅㄧㄥ'] }
-        ],
-        12: [
-          { word: '鵬程萬里', zhuyin: ['ㄆㄥˊ', 'ㄔㄥˊ', 'ㄨㄢˋ', 'ㄌㄧˇ'] },
-          { word: '如魚得水', zhuyin: ['ㄖㄨˊ', 'ㄩˊ', 'ㄉㄜˊ', 'ㄕㄨㄟˇ'] },
-          { word: '馬到成功', zhuyin: ['ㄇㄚˇ', 'ㄉㄠˋ', 'ㄔㄥˊ', 'ㄍㄨㄥ'] }
-        ]
-      }
-    };
-
-    // 解析直式注音：將聲母、介母、韻母與聲調進行完美切分
-    const parseZhuyin = (zy) => {
-      const tones = ['ˊ', 'ˇ', 'ˋ', '˙'];
-      let tone = '';
-      let symbols = [];
-      
-      for (let t of tones) {
-        if (zy.includes(t)) {
-          tone = t;
-          break;
-        }
-      }
-      
-      symbols = Array.from(zy.replace(/[ˊˇˋ˙]/g, ''));
-      return { symbols, tone, isNeutral: tone === '˙' };
-    };
-
-    // 清晰、溫和的台灣女音 TTS 朗讀
-    const speak = (text) => {
-      if (!window.speechSynthesis) return;
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'zh-TW';
-      utterance.rate = 0.82; // 慢速以便孩童書寫
-      window.speechSynthesis.speak(utterance);
-    };
-
-    // 直式注音渲染：實現「輕聲置頂、標調靠右、精準貼合、高度完全一致」教育部標準直排規範
-    const ZhuyinVertical = ({ zy }) => {
-      const { symbols, tone, isNeutral } = parseZhuyin(zy);
-      
-      return (
-        <div 
-          className="flex flex-col items-center justify-between relative font-sans font-extrabold animate-in fade-in duration-200 w-[1.25rem] self-stretch py-0.5"
-        >
-          {/* 輕聲（˙）置頂 - 使用紅色且再次放大的 CSS 實心圓點（w-2.5 h-2.5），並加上紅色樣式 bg-rose-600 */}
-          {isNeutral && (
-            <div className="w-full flex items-center justify-center pt-1 pb-1 flex-shrink-0">
-              <div className="w-2.5 h-2.5 bg-rose-600 rounded-full shadow-sm animate-in zoom-in duration-200"></div>
+                    {/* 規則 2：輕聲（˙）強制顯示在第一個注音符號的正上方 */}
+                    {isFirst && tone === '˙' && (
+                      <span className="absolute bottom-full mb-1 text-2xl font-bold text-blue-900 leading-none left-1/2 -translate-x-1/2 select-none font-sans">
+                        ˙
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-          )}
-          
-          {/* 符號均勻垂直分佈區 */}
-          <div className="flex flex-col items-center justify-around flex-1 w-full h-full min-h-0">
-            {symbols.map((s, idx) => (
-              <div 
-                key={idx} 
-                className="flex-1 flex items-center justify-center relative w-full text-center text-sm md:text-base text-slate-700 leading-none font-black"
-              >
-                <span>{s}</span>
-                {/* 標準聲調（ˊˇˋ）靠右緊貼對應符號的右側中線，位置微調至最完美的 left-[70%]，顏色修正為鮮紅色（text-rose-600），並再度放大字級至 text-xl md:text-3xl */}
-                {!isNeutral && tone !== '' && idx === symbols.length - 1 && (
-                  <span className="absolute left-[70%] top-[48%] -translate-y-1/2 text-xl md:text-3xl text-rose-600 font-extrabold select-none pointer-events-none whitespace-nowrap animate-in zoom-in duration-200">
-                    {tone}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    };
+          );
+        };
 
-    // 田字格元件：帶有虛線十字、經典字體，並以 items-stretch 與直式注音等高對齊
-    const TianZiGe = ({ char, zhuyin, showChar, sizeClass, fontSize }) => {
-      return (
-        <div className="flex items-stretch gap-0.5 md:gap-1.5">
-          {/* 田字格 */}
-          <div 
-            className={`${sizeClass} relative border-[2.5px] border-slate-400 bg-white rounded-lg shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 tianzi-font`}
-          >
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute top-1/2 left-0 w-full border-t border-dashed border-slate-300"></div>
-              <div className="absolute top-0 left-1/2 h-full border-l border-dashed border-slate-300"></div>
-            </div>
-            {showChar && (
-              <span className={`${fontSize} text-slate-800 z-10 select-none animate-in fade-in zoom-in duration-300 font-medium`}>
-                {char}
-              </span>
-            )}
-          </div>
-          {/* 直排注音 (高度自動與田字格完全等高拉伸) */}
-          <ZhuyinVertical zy={zhuyin} />
-        </div>
-      );
-    };
+        function App() {
+          const [view, setView] = useState('home');
+          const [currentStudent, setCurrentStudent] = useState(null);
+          const [quiz, setQuiz] = useState({ items: [], sectionName: '', mode: null, index: 0, results: [], showAnswer: false });
 
-    function App() {
-      const [step, setStep] = useState('role');
-      const [role, setRole] = useState('G1');
-      const [selectedLesson, setSelectedLesson] = useState(10);
-      const [questionCount, setQuestionCount] = useState(10);
-      const [currentIdx, setCurrentIdx] = useState(0);
-      const [quizList, setQuizList] = useState([]);
-      const [showAnswer, setShowAnswer] = useState(false);
-      
-      // 聽寫對錯紀錄：陣列內儲存每題的詞彙、拼音、發音以及 correct (true / false)
-      const [results, setResults] = useState([]);
+          const startQuiz = (items, sectionName, mode) => {
+            setQuiz({ items, sectionName, mode, index: 0, results: [], showAnswer: false });
+            setView('quiz');
+          };
 
-      // 頭像上傳狀態管理（保存在 React 狀態中）
-      const [ianAvatar, setIanAvatar] = useState(null);
-      const [hugoAvatar, setHugoAvatar] = useState(null);
-
-      const fileInputRef = useRef(null);
-      const [uploadingTarget, setUploadingTarget] = useState(null); // 'G1' or 'G4'
-
-      const startQuiz = () => {
-        let pool = [];
-        if (selectedLesson === 'all') {
-          Object.values(WORD_DATABASE[role]).forEach(lessonWords => {
-            pool = [...pool, ...lessonWords];
-          });
-        } else {
-          pool = WORD_DATABASE[role][selectedLesson] || [];
-        }
-
-        const shuffled = [...pool].sort(() => Math.random() - 0.5);
-        const selected = questionCount === 'all' ? shuffled : shuffled.slice(0, questionCount);
-        
-        setQuizList(selected);
-        setCurrentIdx(0);
-        setShowAnswer(false);
-        setResults([]); // 初始化聽寫對錯紀錄
-        setStep('quiz');
-      };
-
-      useEffect(() => {
-        if (step === 'quiz' && quizList.length > 0) {
-          const timer = setTimeout(() => {
-            const currentQuestion = quizList[currentIdx];
-            speak(currentQuestion.speech || currentQuestion.word);
-          }, 500);
-          return () => clearTimeout(timer);
-        }
-      }, [step, currentIdx, quizList]);
-
-      // 紀錄手動評分並直接跳轉下一題或結算頁
-      const handleRecord = (isCorrect) => {
-        const currentItem = quizList[currentIdx];
-        const newResults = [...results, { ...currentItem, correct: isCorrect }];
-        setResults(newResults);
-
-        if (currentIdx < quizList.length - 1) {
-          setCurrentIdx(currentIdx + 1);
-          setShowAnswer(false);
-        } else {
-          setStep('result');
-        }
-      };
-
-      // 觸發上傳頭像事件
-      const triggerAvatarUpload = (target, e) => {
-        e.stopPropagation(); // 阻止氣泡事件，避免直接觸發角色選擇
-        setUploadingTarget(target);
-        if (fileInputRef.current) {
-          fileInputRef.current.click();
-        }
-      };
-
-      // 處理上傳的圖片並讀取為 Base64
-      const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            if (uploadingTarget === 'G1') {
-              setIanAvatar(reader.result);
-            } else if (uploadingTarget === 'G4') {
-              setHugoAvatar(reader.result);
+          const handleAnswer = (isCorrect) => {
+            const newResults = [...quiz.results, { item: quiz.items[quiz.index], isCorrect }];
+            if (quiz.index < quiz.items.length - 1) {
+              setQuiz({...quiz, index: quiz.index + 1, results: newResults, showAnswer: false});
+            } else {
+              setQuiz({...quiz, results: newResults});
+              setView('summary');
             }
           };
-          reader.readAsDataURL(file);
-        }
-      };
 
-      // 自適應造詞尺寸（防捲軸溢出，同時確保垂直造詞字體緊湊親密）
-      const getLayoutConfig = (wordLength) => {
-        if (wordLength >= 4) {
-          return { 
-            size: 'w-14 h-14 md:w-18 md:h-18', 
-            font: 'text-2xl md:text-4xl', 
-            gap: 'gap-0.5 md:gap-1'
-          };
-        } else if (wordLength === 3) {
-          return { 
-            size: 'w-18 h-18 md:w-22 md:h-22', 
-            font: 'text-3xl md:text-5xl', 
-            gap: 'gap-0.75 md:gap-1.25' 
-          };
-        } else {
-          return { 
-            size: 'w-24 h-24 md:w-28 md:h-28', 
-            font: 'text-4xl md:text-6xl', 
-            gap: 'gap-1.5 md:gap-2' 
-          };
-        }
-      };
-
-      // 獲取目前活躍頭像
-      const getActiveAvatar = () => {
-        if (role === 'G1') {
-          return ianAvatar ? <img src={ianAvatar} alt="Ian" className="w-full h-full object-cover" /> : <DefaultIanAvatar />;
-        } else {
-          return hugoAvatar ? <img src={hugoAvatar} alt="Hugo" className="w-full h-full object-cover" /> : <DefaultHugoAvatar />;
-        }
-      };
-
-      // 計算統計數據
-      const totalCount = results.length;
-      const correctCount = results.filter(r => r.correct).length;
-      const incorrectCount = totalCount - correctCount;
-      const accuracyRate = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
-
-      // 根據正確率給予貼切又溫暖的繁體中文鼓勵語
-      const getMotivationalMessage = () => {
-        if (accuracyRate === 100) return "太完美了！拿到 100 分滿分！真是個聰明的小神童！💯";
-        if (accuracyRate >= 80) return "表現非常棒！再加把勁，下次一定能拿到滿分喔！🌟";
-        if (accuracyRate >= 60) return "很不錯的嘗試！繼續練習，你會寫得越來越好！👍";
-        return "沒關係，我們再多聽幾次、多寫幾次，一定會大進步的！❤️";
-      };
-
-      return (
-        <div className="fixed inset-0 bg-[#f8fafc] flex flex-col font-sans overflow-hidden select-none">
-          <div className="h-1.5 w-full bg-gradient-to-r from-teal-400 via-indigo-400 to-rose-400"></div>
-
-          {/* 隱藏的頭像上傳 Input */}
-          <input 
-            type="file" 
-            ref={fileInputRef} 
-            onChange={handleFileChange} 
-            accept="image/*" 
-            className="hidden" 
-          />
-
-          {/* Step 1: 角色選擇 */}
-          {step === 'role' && (
-            <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-12 animate-in fade-in duration-300">
-              <div className="text-center">
-                <h1 className="text-4xl font-black text-slate-800 mb-2 tracking-tighter">圈詞好棒棒</h1>
-                <div className="h-1.5 w-16 bg-indigo-500 mx-auto rounded-full"></div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl px-4">
-                
-                {/* G1 Ian 角色卡 */}
-                <button 
-                  onClick={() => { setRole('G1'); setStep('lesson'); }}
-                  className="group p-8 bg-white rounded-3xl border-2 border-slate-100 hover:border-indigo-300 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col items-center relative"
-                >
-                  {/* 可上傳頭像框 */}
-                  <div className="relative w-24 h-24 mb-6 group-hover:scale-105 transition-transform">
-                    <div className="w-24 h-24 rounded-full border-4 border-indigo-100 overflow-hidden shadow-sm flex items-center justify-center bg-indigo-50">
-                      {ianAvatar ? (
-                        <img src={ianAvatar} alt="Ian Avatar" className="w-full h-full object-cover" />
-                      ) : (
-                        <DefaultIanAvatar />
-                      )}
-                    </div>
-                    {/* 上傳小按鈕 */}
-                    <div 
-                      onClick={(e) => triggerAvatarUpload('G1', e)}
-                      className="absolute bottom-0 right-0 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow hover:bg-indigo-700 transition-colors"
-                      title="上傳專屬頭像"
-                    >
-                      <IconCamera />
-                    </div>
-                  </div>
-                  <span className="text-2xl font-black text-slate-700">G1 Ian</span>
-                  <span className="text-slate-400 text-sm mt-2 font-medium">小一基礎生字造詞</span>
-                </button>
-
-                {/* G4 Hugo 角色卡 */}
-                <button 
-                  onClick={() => { setRole('G4'); setStep('lesson'); }}
-                  className="group p-8 bg-white rounded-3xl border-2 border-slate-100 hover:border-rose-300 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col items-center relative"
-                >
-                  {/* 可上傳頭像框 */}
-                  <div className="relative w-24 h-24 mb-6 group-hover:scale-105 transition-transform">
-                    <div className="w-24 h-24 rounded-full border-4 border-rose-100 overflow-hidden shadow-sm flex items-center justify-center bg-rose-50">
-                      {hugoAvatar ? (
-                        <img src={hugoAvatar} alt="Hugo Avatar" className="w-full h-full object-cover" />
-                      ) : (
-                        <DefaultHugoAvatar />
-                      )}
-                    </div>
-                    {/* 上傳小按鈕 */}
-                    <div 
-                      onClick={(e) => triggerAvatarUpload('G4', e)}
-                      className="absolute bottom-0 right-0 w-8 h-8 bg-rose-600 text-white rounded-full flex items-center justify-center shadow hover:bg-rose-700 transition-colors"
-                      title="上傳專屬頭像"
-                    >
-                      <IconCamera />
-                    </div>
-                  </div>
-                  <span className="text-2xl font-black text-slate-700">G4 Hugo</span>
-                  <span className="text-slate-400 text-sm mt-2 font-medium">小四進階成語精選</span>
-                </button>
-
+          if (view === 'home') return (
+            <div className="min-h-screen bg-blue-50 p-8 flex flex-col items-center justify-center font-sans">
+              <h1 className="text-5xl font-bold text-blue-900 mb-20 drop-shadow-sm">📝 圈詞好棒棒</h1>
+              <div className="grid grid-cols-1 gap-10 w-full max-w-md">
+                {Object.entries(quizData).map(([key, data]) => (
+                  <button key={key} onClick={() => { setCurrentStudent(data); setView('student'); }} className="bg-white p-12 rounded-[2rem] shadow-xl border-4 border-blue-200 hover:border-blue-400 hover:shadow-2xl hover:-translate-y-1 transition-all text-4xl font-bold text-blue-800">
+                    {data.title}
+                  </button>
+                ))}
               </div>
             </div>
-          )}
+          );
 
-          {/* Step 2: 課次與題數選擇 */}
-          {step === 'lesson' && (
-            <div className="flex-1 flex flex-col p-6 max-w-xl mx-auto w-full justify-center overflow-y-auto animate-in fade-in duration-300">
-              <button onClick={() => setStep('role')} className="flex items-center text-slate-400 hover:text-slate-600 mb-6 transition-colors font-bold text-sm">
-                <IconArrowLeft /> <span className="ml-2">返回角色</span>
+          if (view === 'student') return (
+            <div className="min-h-screen bg-blue-50 p-8 font-sans max-w-2xl mx-auto">
+              <button onClick={() => setView('home')} className="mb-8 text-xl text-blue-700 font-bold hover:underline flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                返回
               </button>
+              <h2 className="text-4xl font-bold text-blue-900 mb-8 text-center bg-blue-100 py-4 rounded-3xl">{currentStudent.title} 的任務</h2>
               
-              <div className="space-y-8 bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm">
-                <section>
-                  <div className="flex items-center mb-4">
-                    <span className="text-indigo-500 mr-3"><IconBookOpen /></span>
-                    <h2 className="text-lg font-extrabold text-slate-700">選擇練習課次</h2>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2.5">
-                    {[7, 8, 9, 10, 11, 12, 'all'].map((l) => (
-                      <button
-                        key={l}
-                        onClick={() => setSelectedLesson(l)}
-                        className={`py-3.5 rounded-2xl font-bold transition-all duration-200 border-2 text-sm ${
-                          selectedLesson === l 
-                          ? 'bg-indigo-500 border-indigo-500 text-white shadow-md' 
-                          : 'bg-white border-slate-100 text-slate-500 hover:border-slate-200'
-                        }`}
-                      >
-                        {l === 'all' ? '全部隨機' : `第 ${l} 課`}
-                      </button>
-                    ))}
-                  </div>
-                </section>
-
-                <section>
-                  <div className="flex items-center mb-4">
-                    <span className="text-indigo-500 mr-3"><IconSettings /></span>
-                    <h2 className="text-lg font-extrabold text-slate-700">設定練習題數</h2>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2.5">
-                    {[5, 10, 'all'].map((c) => (
-                      <button
-                        key={c}
-                        onClick={() => setQuestionCount(c)}
-                        className={`py-3.5 rounded-2xl font-bold transition-all duration-200 border-2 text-sm ${
-                          questionCount === c 
-                          ? 'bg-indigo-500 border-indigo-500 text-white shadow-md' 
-                          : 'bg-white border-slate-100 text-slate-500 hover:border-slate-200'
-                        }`}
-                      >
-                        {c === 'all' ? '全部' : `${c} 題`}
-                      </button>
-                    ))}
-                  </div>
-                </section>
-
-                <button
-                  onClick={startQuiz}
-                  className="w-full py-4.5 bg-slate-800 text-white rounded-2xl text-base font-bold shadow-lg hover:bg-slate-900 transition-all active:scale-95 mt-2"
-                >
-                  開始練習
-                </button>
-              </div>
+              {Object.keys(currentStudent.sections).length === 0 ? (
+                <div className="text-center text-gray-500 text-xl py-12 bg-white rounded-[2rem] shadow-lg">
+                  目前還沒有建立題庫喔！
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-6 max-h-[70vh] overflow-y-auto pr-2">
+                  {Object.entries(currentStudent.sections).map(([name, items]) => (
+                    <div key={name} className="bg-white p-8 rounded-[2rem] shadow-lg border-2 border-blue-100 hover:border-blue-300 transition-colors">
+                      <h3 className="text-2xl font-bold text-gray-700 mb-6 tracking-wider border-b-2 border-blue-50 pb-4">{name} <span className="text-base font-normal text-gray-400 bg-gray-100 px-3 py-1 rounded-full ml-2">共 {items.length} 題</span></h3>
+                      <div className="flex gap-6">
+                        <button onClick={() => startQuiz(items, name, 'char')} className="flex-1 bg-blue-600 text-white py-5 rounded-2xl font-bold text-xl hover:bg-blue-700 hover:shadow-lg transition-all active:scale-95">考國字</button>
+                        <button onClick={() => startQuiz(items, name, 'zhuyin')} className="flex-1 bg-emerald-600 text-white py-5 rounded-2xl font-bold text-xl hover:bg-emerald-700 hover:shadow-lg transition-all active:scale-95">考注音</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
+          );
 
-          {/* Step 3: 聽寫測驗 (由上到下垂直佈局) */}
-          {step === 'quiz' && quizList.length > 0 && (
-            <div className="flex-1 flex flex-col overflow-hidden relative">
-              <div className="w-full bg-slate-100 h-1.5">
-                <div 
-                  className="bg-indigo-500 h-full transition-all duration-700 ease-out" 
-                  style={{ width: ((currentIdx + 1) / quizList.length) * 100 + '%' }}
-                ></div>
+          if (view === 'summary') {
+            const correctCount = quiz.results.filter(r => r.isCorrect).length;
+            const errors = quiz.results.filter(r => !r.isCorrect);
+            const score = Math.round((correctCount / quiz.items.length) * 100);
+            
+            return (
+              <div className="min-h-screen bg-blue-50 p-6 flex flex-col items-center justify-center font-sans">
+                <div className="bg-white p-10 rounded-[2rem] shadow-2xl w-full max-w-lg text-center border-t-8 border-blue-500">
+                  <h2 className="text-4xl font-bold mb-4 text-gray-800">練習結束！</h2>
+                  <div className="text-6xl mb-6">{score === 100 ? '🌟' : score >= 80 ? '👍' : '💪'}</div>
+                  <p className="text-2xl mb-8 text-gray-700">答對題數：<span className="font-bold text-emerald-600 text-3xl">{correctCount}</span> / {quiz.items.length}</p>
+                  
+                  {errors.length > 0 && (
+                    <div className="text-left bg-rose-50 p-6 rounded-2xl mb-8 border-2 border-rose-100">
+                      <h3 className="text-xl font-bold text-rose-800 mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        需加強的題目：
+                      </h3>
+                      <div className="flex flex-col gap-3">
+                        {errors.map((err, i) => (
+                          <div key={i} className="flex justify-between items-center bg-white py-3 px-4 rounded-xl shadow-sm">
+                            <span className="font-bold text-2xl tracking-widest text-gray-800">{err.item.word}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  <button onClick={() => setView('home')} className="w-full bg-blue-900 text-white py-6 rounded-2xl font-bold text-xl hover:bg-blue-800 hover:shadow-lg transition-all active:scale-95">回首頁</button>
+                </div>
               </div>
-              
-              <div className="px-6 py-4 flex justify-between items-center text-slate-400 font-extrabold text-sm font-sans">
-                <button onClick={() => setStep('lesson')} className="flex items-center hover:text-slate-600 transition-colors">
-                  <IconArrowLeft /> <span className="ml-1 font-bold">退出</span>
-                </button>
+            );
+          }
+
+          const item = quiz.items[quiz.index];
+          return (
+            <div className="min-h-screen bg-blue-50 p-6 flex flex-col items-center justify-center font-sans">
+              <div className="bg-white p-8 rounded-[2rem] shadow-2xl w-full max-w-lg">
+                <div className="flex justify-between items-center mb-6">
+                  <div className="font-bold text-blue-800 bg-blue-100 px-4 py-2 rounded-xl text-lg">{quiz.sectionName}</div>
+                  <div className="font-bold text-blue-500 text-lg bg-blue-50 px-4 py-2 rounded-xl">第 {quiz.index + 1} / {quiz.items.length} 題</div>
+                </div>
                 
-                {/* 左側顯示目前挑戰者頭像與名稱 */}
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full overflow-hidden border border-slate-200 flex items-center justify-center">
-                    {getActiveAvatar()}
-                  </div>
-                  <span className="text-slate-600 font-bold">{role === 'G1' ? 'Ian' : 'Hugo'} 正在挑戰！</span>
+                {/* Progress Bar */}
+                <div className="w-full bg-gray-100 rounded-full h-2.5 mb-8">
+                  <div className="bg-blue-500 h-2.5 rounded-full transition-all duration-300" style={{ width: `${((quiz.index) / quiz.items.length) * 100}%` }}></div>
                 </div>
 
-                <div className="tracking-widest font-bold">
-                  已完成 {currentIdx + 1} / {quizList.length}
-                </div>
-              </div>
-
-              {/* 垂直堆疊生字核心 */}
-              <div className="flex-1 flex flex-col items-center justify-center px-4 py-2 overflow-hidden">
-                <div className={`flex flex-col items-center ${getLayoutConfig(quizList[currentIdx].word.length).gap} justify-center h-full max-h-[70vh]`}>
-                  {Array.from(quizList[currentIdx].word).map((char, i) => (
-                    <TianZiGe 
-                      key={i}
-                      char={char}
-                      zhuyin={quizList[currentIdx].zhuyin[i]}
-                      showChar={showAnswer}
-                      sizeClass={getLayoutConfig(quizList[currentIdx].word.length).size}
-                      fontSize={getLayoutConfig(quizList[currentIdx].word.length).font}
-                    />
+                <div className="flex flex-col items-center gap-8 py-8 mb-4 max-h-[50vh] overflow-y-auto">
+                  {item.word.split('').map((char, i) => (
+                    <div key={i} className="flex gap-8 items-center border-b-2 border-dashed border-gray-100 pb-8 w-full justify-center last:border-0">
+                      <div className="w-28 h-28 border-4 border-blue-100 rounded-[2rem] flex items-center justify-center text-6xl font-bold bg-white shadow-inner text-gray-800 select-none">
+                        {quiz.showAnswer || quiz.mode === 'zhuyin' ? char : '？'}
+                      </div>
+                      <div className="h-28 flex items-center justify-center bg-gray-50 rounded-[2rem] px-4 w-28 shadow-inner border-2 border-gray-100">
+                        {quiz.showAnswer || quiz.mode === 'char' ? <ZhuyinBlock text={item.zhuyin[i]}/> : <div className="text-gray-400 font-bold text-xl select-none">注音</div>}
+                      </div>
+                    </div>
                   ))}
                 </div>
 
-                <button 
-                  onClick={() => {
-                    const currentQuestion = quizList[currentIdx];
-                    speak(currentQuestion.speech || currentQuestion.word);
-                  }}
-                  className="mt-6 w-14 h-14 bg-white border border-slate-200 rounded-full flex items-center justify-center text-indigo-500 hover:bg-indigo-50 transition-all shadow-sm active:scale-90"
-                  title="聽讀音"
-                >
-                  <IconVolume2 />
-                </button>
-              </div>
-
-              {/* 底部按鈕：看答案 -> [正確 / 錯誤評估] -> 自動前進 */}
-              <div className="p-6 bg-white border-t border-slate-100 flex gap-4 min-h-[92px]">
-                {!showAnswer ? (
-                  <button 
-                    onClick={() => setShowAnswer(true)}
-                    className="flex-1 py-4.5 bg-slate-800 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all text-base"
-                  >
-                    <IconEye /> 看答案
-                  </button>
-                ) : (
-                  <div className="flex-1 flex gap-3.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
-                    <button 
-                      onClick={() => handleRecord(true)}
-                      className="flex-1 py-4.5 bg-emerald-600 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all text-base hover:bg-emerald-700"
-                    >
-                      <IconCheck /> 正確
+                {!quiz.showAnswer ? 
+                  <button onClick={() => setQuiz({...quiz, showAnswer: true})} className="w-full bg-blue-600 text-white py-6 rounded-2xl font-bold text-2xl hover:bg-blue-700 hover:shadow-lg transition-all active:scale-95">查看答案</button> :
+                  <div className="flex gap-6 animate-fade-in">
+                    <button onClick={() => handleAnswer(false)} className="flex-1 bg-rose-500 text-white py-6 rounded-2xl font-bold text-2xl hover:bg-rose-600 hover:shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                      錯誤
                     </button>
-                    <button 
-                      onClick={() => handleRecord(false)}
-                      className="flex-1 py-4.5 bg-rose-600 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all text-base hover:bg-rose-700"
-                    >
-                      <IconCross /> 錯誤
+                    <button onClick={() => handleAnswer(true)} className="flex-1 bg-emerald-500 text-white py-6 rounded-2xl font-bold text-2xl hover:bg-emerald-600 hover:shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      正確
                     </button>
                   </div>
-                )}
+                }
               </div>
             </div>
-          )}
+          );
+        }
 
-          {/* Step 4: 結算統計報告頁面 (可上下滑動以閱讀詳細答題報告) */}
-          {step === 'result' && (
-            <div className="flex-1 flex flex-col overflow-y-auto bg-slate-50 animate-in zoom-in duration-300">
-              <div className="max-w-2xl mx-auto w-full p-6 space-y-6">
-                
-                {/* 成果與獎盃卡 */}
-                <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm text-center flex flex-col items-center">
-                  <div className="mb-4 relative">
-                    <div className="absolute inset-0 bg-yellow-400 rounded-full blur-3xl opacity-10 animate-pulse"></div>
-                    <IconTrophy />
-                  </div>
-                  <h2 className="text-3xl font-black text-slate-800 mb-1">練習成果</h2>
-                  <p className="text-rose-500 font-extrabold text-sm tracking-wider uppercase mb-3">
-                    {role === 'G1' ? 'Ian' : 'Hugo'} 的聽寫統計報告
-                  </p>
-                  <p className="text-slate-500 text-sm max-w-md font-bold leading-relaxed">
-                    {getMotivationalMessage()}
-                  </p>
-                </div>
-
-                {/* 四宮格儀表板統計數字 */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs text-center">
-                    <span className="text-slate-400 text-xs font-bold block mb-1">總聽寫詞數</span>
-                    <span className="text-3xl font-black text-slate-700">{totalCount}</span>
-                  </div>
-                  <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs text-center">
-                    <span className="text-emerald-500 text-xs font-bold block mb-1">答對詞數</span>
-                    <span className="text-3xl font-black text-emerald-600">{correctCount}</span>
-                  </div>
-                  <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs text-center">
-                    <span className="text-rose-500 text-xs font-bold block mb-1">答錯詞數</span>
-                    <span className="text-3xl font-black text-rose-600">{incorrectCount}</span>
-                  </div>
-                  <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs text-center">
-                    <span className="text-indigo-500 text-xs font-bold block mb-1">正確率</span>
-                    <span className="text-3xl font-black text-indigo-600">{accuracyRate}%</span>
-                  </div>
-                </div>
-
-                {/* 詳細答題清單：🟢 答對的詞彙 & 🔴 需要再練習的詞彙 */}
-                <div className="space-y-4">
-                  
-                  {/* 答錯需要再練習的詞彙清單（最優先呈現以供訂正） */}
-                  {incorrectCount > 0 && (
-                    <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
-                      <div className="flex items-center gap-2 mb-4 text-rose-600">
-                        <div className="w-6 h-6 rounded-full bg-rose-50 flex items-center justify-center flex-shrink-0">
-                          <IconCross />
-                        </div>
-                        <h3 className="font-extrabold text-base">需要再練習的詞彙 ({incorrectCount})</h3>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {results.filter(r => !r.correct).map((item, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-3.5 bg-rose-50/50 rounded-xl border border-rose-100">
-                            <div className="flex flex-col">
-                              <span className="text-slate-800 font-extrabold text-lg tracking-wide tianzi-font">{item.word}</span>
-                              <span className="text-slate-400 text-xs font-bold font-sans mt-0.5">{item.zhuyin.join(' ')}</span>
-                            </div>
-                            <button 
-                              onClick={() => speak(item.speech || item.word)}
-                              className="w-10 h-10 bg-white border border-rose-200 text-rose-500 rounded-full flex items-center justify-center shadow-xs active:scale-90 hover:bg-rose-50 transition-colors"
-                              title="播放發音供孩子重新訂正"
-                            >
-                              <IconVolume2 className="w-5 h-5" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* 答對的詞彙清單 */}
-                  {correctCount > 0 && (
-                    <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
-                      <div className="flex items-center gap-2 mb-4 text-emerald-600">
-                        <div className="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                          <IconCheck />
-                        </div>
-                        <h3 className="font-extrabold text-base">答對的詞彙 ({correctCount})</h3>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {results.filter(r => r.correct).map((item, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-3.5 bg-emerald-50/30 rounded-xl border border-emerald-100">
-                            <div className="flex flex-col">
-                              <span className="text-slate-800 font-extrabold text-lg tracking-wide tianzi-font">{item.word}</span>
-                              <span className="text-slate-400 text-xs font-bold font-sans mt-0.5">{item.zhuyin.join(' ')}</span>
-                            </div>
-                            <button 
-                              onClick={() => speak(item.speech || item.word)}
-                              className="w-10 h-10 bg-white border border-emerald-200 text-emerald-600 rounded-full flex items-center justify-center shadow-xs active:scale-90 hover:bg-emerald-50 transition-colors"
-                              title="播放發音"
-                            >
-                              <IconVolume2 className="w-5 h-5" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                </div>
-
-                {/* 底部重來按鈕 */}
-                <div className="flex flex-col gap-3 pt-4">
-                  <button 
-                    onClick={startQuiz}
-                    className="w-full py-4.5 bg-indigo-500 text-white rounded-2xl font-bold shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all text-base"
-                  >
-                    <IconRotateCcw /> 再挑戰一次
-                  </button>
-                  <button 
-                    onClick={() => setStep('role')}
-                    className="w-full py-4.5 bg-white border border-slate-200 text-slate-500 rounded-2xl font-bold active:scale-95 transition-all text-base hover:bg-slate-50"
-                  >
-                    返回首頁
-                  </button>
-                </div>
-
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-  </script>
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
-
-```
