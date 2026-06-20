@@ -4,306 +4,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📝 圈詞好棒棒</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React & ReactDOM CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
-    <!-- Babel for JSX compilation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js" crossorigin></script>
     <style>
-        /* 避免使用者誤選取文字影響作答 */
-        .no-select {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
+        .no-select { -webkit-user-select: none; user-select: none; }
+        body { font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; }
     </style>
 </head>
 <body class="bg-blue-50">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState } = React;
-
-        // --- 資料庫 ---
+        // 資料庫內容已保留原始題目數據
         const quizData = {
-          ian: { 
-            id: 'ian', title: 'Ian', 
-            sections: {
-              'G1 L7 圈詞': [
-                { word: '蛋糕', zhuyin: ['ㄉㄢˋ', 'ㄍㄠ'] },
-                { word: '漂亮', zhuyin: ['ㄆㄧㄠˋ', 'ㄌㄧㄤˋ'] },
-                { word: '老師', zhuyin: ['ㄌㄠˇ', 'ㄕ'] },
-                { word: '感謝', zhuyin: ['ㄍㄢˇ', 'ㄒㄧㄝˋ'] },
-                { word: '笑臉', zhuyin: ['ㄒㄧㄠˋ', 'ㄌㄧㄢˇ'] },
-                { word: '一張', zhuyin: ['ㄧˋ', 'ㄓㄤ'] },
-                { word: '祝福', zhuyin: ['ㄓㄨˋ', 'ㄈㄨˊ'] },
-                { word: '一顆', zhuyin: ['ㄧˋ', 'ㄎㄜ'] },
-                { word: '畫畫', zhuyin: ['ㄏㄨㄚˋ', 'ㄏㄨㄚˋ'] }
-              ],
-              'G1 L8 圈詞': [
-                { word: '敬上', zhuyin: ['ㄐㄧㄥˋ', 'ㄕㄤˋ'] },
-                { word: '長大', zhuyin: ['ㄓㄤˇ', 'ㄉㄚˋ'] },
-                { word: '很久', zhuyin: ['ㄏㄣˇ', 'ㄐㄧㄡˇ'] },
-                { word: '埋進', zhuyin: ['ㄇㄞˊ', 'ㄐㄧㄣˋ'] },
-                { word: '地方', zhuyin: ['ㄉㄧˋ', 'ㄈㄤ'] },
-                { word: '果子', zhuyin: ['ㄍㄨㄛˇ', 'ㄗ˙'] },
-                { word: '秋天', zhuyin: ['ㄑㄧㄡ', 'ㄊㄧㄢ'] },
-                { word: '卡片', zhuyin: ['ㄎㄚˇ', 'ㄆㄧㄢˋ'] },
-                { word: '松鼠', zhuyin: ['ㄙㄨㄥ', 'ㄕㄨˇ'] }
-              ],
-              'G1 L9 圈詞': [
-                { word: '當成', zhuyin: ['ㄉㄤˋ', 'ㄔㄥˊ'] },
-                { word: '一樣', zhuyin: ['ㄧˊ', 'ㄧㄤˋ'] },
-                { word: '學校', zhuyin: ['ㄒㄩㄝˊ', 'ㄒㄧㄠˋ'] },
-                { word: '一邊', zhuyin: ['ㄧˋ', 'ㄅㄧㄢ'] },
-                { word: '工作', zhuyin: ['ㄍㄨㄥ', 'ㄗㄨㄛˋ'] },
-                { word: '校園', zhuyin: ['ㄒㄧㄠˋ', 'ㄩㄢˊ'] },
-                { word: '早上', zhuyin: ['ㄗㄠˇ', 'ㄕㄤˋ'] },
-                { word: '寶貝', zhuyin: ['ㄅㄠˇ', 'ㄅㄟˋ'] },
-                { word: '奶奶', zhuyin: ['ㄋㄞˇ', 'ㄋㄞ˙'] }
-              ],
-              'G1 L10 圈詞': [
-                { word: '青蛙', zhuyin: ['ㄑㄧㄥ', 'ㄨㄚ'] },
-                { word: '裝不下', zhuyin: ['ㄓㄨㄤ', 'ㄅㄨˊ', 'ㄒㄧㄚˋ'] },
-                { word: '世界', zhuyin: ['ㄕˋ', 'ㄐㄧㄝˋ'] },
-                { word: '幾天', zhuyin: ['ㄐㄧˇ', 'ㄊㄧㄢ'] },
-                { word: '一窪', zhuyin: ['ㄧˋ', 'ㄨㄚ'] },
-                { word: '說大話', zhuyin: ['ㄕㄨㄛ', 'ㄉㄚˋ', 'ㄏㄨㄚˋ'] },
-                { word: '肚子', zhuyin: ['ㄉㄨˋ', 'ㄗ˙'] },
-                { word: '東西', zhuyin: ['ㄉㄨㄥ', 'ㄒㄧ˙'] },
-                { word: '睡覺', zhuyin: ['ㄕㄨㄟˋ', 'ㄐㄧㄠˋ'] },
-                { word: '除了', zhuyin: ['ㄔㄨˊ', 'ㄌㄜ˙'] },
-                { word: '一隻', zhuyin: ['ㄧˋ', 'ㄓ'] }
-              ],
-              'G1 L11 圈詞': [
-                { word: '外面', zhuyin: ['ㄨㄞˋ', 'ㄇㄧㄢˋ'] },
-                { word: '鴨子', zhuyin: ['ㄧㄚ', 'ㄗ˙'] },
-                { word: '星星', zhuyin: ['ㄒㄧㄥ', '˙ㄒㄧㄥ'] },
-                { word: '奇怪', zhuyin: ['ㄑㄧˊ', 'ㄍㄨㄞˋ'] },
-                { word: '吃光', zhuyin: ['ㄔ', 'ㄍㄨㄤ'] },
-                { word: '告訴', zhuyin: ['ㄍㄠˋ', 'ㄙㄨˋ'] },
-                { word: '快樂', zhuyin: ['ㄎㄨㄞˋ', 'ㄌㄜˋ'] },
-                { word: '不見', zhuyin: ['ㄅㄨˊ', 'ㄐㄧㄢˋ'] },
-                { word: '波紋', zhuyin: ['ㄅㄛ', 'ㄨㄣˊ'] },
-                { word: '一圈', zhuyin: ['ㄧˋ', 'ㄑㄩㄢ'] },
-                { word: '池塘', zhuyin: ['ㄔˊ', 'ㄊㄤˊ'] },
-                { word: '許多', zhuyin: ['ㄒㄩˇ', 'ㄉㄨㄛ'] }
-              ],
-              'G1 L12 圈詞': [
-                { word: '加油', zhuyin: ['ㄐㄧㄚ', 'ㄧㄡˊ'] },
-                { word: '辛苦', zhuyin: ['ㄒㄧㄣ', 'ㄎㄨˇ'] },
-                { word: '地瓜苗', zhuyin: ['ㄉㄧˋ', 'ㄍㄨㄚ', 'ㄇㄧㄠˊ'] },
-                { word: '種田', zhuyin: ['ㄓㄨㄥˋ', 'ㄊㄧㄢˊ'] },
-                { word: '小豬', zhuyin: ['ㄒㄧㄠˇ', 'ㄓㄨ'] },
-                { word: '一半', zhuyin: ['ㄧˊ', 'ㄅㄢˋ'] },
-                { word: '不止', zhuyin: ['ㄅㄨˋ', 'ㄓˇ'] },
-                { word: '分享', zhuyin: ['ㄈㄣ', 'ㄒㄧㄤˇ'] },
-                { word: '地瓜葉', zhuyin: ['ㄉㄧˋ', 'ㄍㄨㄚ', 'ㄧㄝˋ'] },
-                { word: '收成', zhuyin: ['ㄕㄡ', 'ㄔㄥˊ'] },
-                { word: '不能', zhuyin: ['ㄅㄨˋ', 'ㄋㄥˊ'] }
-              ]
+            ian: {
+                id: 'ian', title: 'Ian (G1)',
+                categories: {
+                    '圈詞': {
+                        'L7': [{ word: '蛋糕', zhuyin: ['ㄉㄢˋ', 'ㄍㄠ'] }, { word: '漂亮', zhuyin: ['ㄆㄧㄠˋ', 'ㄌㄧㄤˋ'] }, { word: '老師', zhuyin: ['ㄌㄠˇ', 'ㄕ'] }, { word: '感謝', zhuyin: ['ㄍㄢˇ', 'ㄒㄧㄝˋ'] }, { word: '笑臉', zhuyin: ['ㄒㄧㄠˋ', 'ㄌㄧㄢˇ'] }, { word: '一張', zhuyin: ['ㄧˋ', 'ㄓㄤ'] }, { word: '祝福', zhuyin: ['ㄓㄨˋ', 'ㄈㄨˊ'] }, { word: '一顆', zhuyin: ['ㄧˋ', 'ㄎㄜ'] }, { word: '畫畫', zhuyin: ['ㄏㄨㄚˋ', 'ㄏㄨㄚˋ'] }],
+                        'L8': [{ word: '敬上', zhuyin: ['ㄐㄧㄥˋ', 'ㄕㄤˋ'] }, { word: '長大', zhuyin: ['ㄓㄤˇ', 'ㄉㄚˋ'] }, { word: '很久', zhuyin: ['ㄏㄣˇ', 'ㄐㄧㄡˇ'] }, { word: '埋進', zhuyin: ['ㄇㄞˊ', 'ㄐㄧㄣˋ'] }, { word: '地方', zhuyin: ['ㄉㄧˋ', 'ㄈㄤ'] }, { word: '果子', zhuyin: ['ㄍㄨㄛˇ', 'ㄗ˙'] }, { word: '秋天', zhuyin: ['ㄑㄧㄡ', 'ㄊㄧㄢ'] }, { word: '卡片', zhuyin: ['ㄎㄚˇ', 'ㄆㄧㄢˋ'] }, { word: '松鼠', zhuyin: ['ㄙㄨㄥ', 'ㄕㄨˇ'] }],
+                        'L9': [{ word: '當成', zhuyin: ['ㄉㄤˋ', 'ㄔㄥˊ'] }, { word: '一樣', zhuyin: ['ㄧˊ', 'ㄧㄤˋ'] }, { word: '學校', zhuyin: ['ㄒㄩㄝˊ', 'ㄒㄧㄠˋ'] }, { word: '一邊', zhuyin: ['ㄧˋ', 'ㄅㄧㄢ'] }, { word: '工作', zhuyin: ['ㄍㄨㄥ', 'ㄗㄨㄛˋ'] }, { word: '校園', zhuyin: ['ㄒㄧㄠˋ', 'ㄩㄢˊ'] }, { word: '早上', zhuyin: ['ㄗㄠˇ', 'ㄕㄤˋ'] }, { word: '寶貝', zhuyin: ['ㄅㄠˇ', 'ㄅㄟˋ'] }, { word: '奶奶', zhuyin: ['ㄋㄞˇ', 'ㄋㄞ˙'] }],
+                        'L10': [{ word: '青蛙', zhuyin: ['ㄑㄧㄥ', 'ㄨㄚ'] }, { word: '裝不下', zhuyin: ['ㄓㄨㄤ', 'ㄅㄨˊ', 'ㄒㄧㄚˋ'] }, { word: '世界', zhuyin: ['ㄕˋ', 'ㄐㄧㄝˋ'] }, { word: '幾天', zhuyin: ['ㄐㄧˇ', 'ㄊㄧㄢ'] }, { word: '一窪', zhuyin: ['ㄧˋ', 'ㄨㄚ'] }, { word: '說大話', zhuyin: ['ㄕㄨㄛ', 'ㄉㄚˋ', 'ㄏㄨㄚˋ'] }, { word: '肚子', zhuyin: ['ㄉㄨˋ', 'ㄗ˙'] }, { word: '東西', zhuyin: ['ㄉㄨㄥ', 'ㄒㄧ˙'] }, { word: '睡覺', zhuyin: ['ㄕㄨㄟˋ', 'ㄐㄧㄠˋ'] }, { word: '除了', zhuyin: ['ㄔㄨˊ', 'ㄌㄜ˙'] }, { word: '一隻', zhuyin: ['ㄧˋ', 'ㄓ'] }],
+                        'L11': [{ word: '外面', zhuyin: ['ㄨㄞˋ', 'ㄇㄧㄢˋ'] }, { word: '鴨子', zhuyin: ['ㄧㄚ', 'ㄗ˙'] }, { word: '星星', zhuyin: ['ㄒㄧㄥ', '˙ㄒㄧㄥ'] }, { word: '奇怪', zhuyin: ['ㄑㄧˊ', 'ㄍㄨㄞˋ'] }, { word: '吃光', zhuyin: ['ㄔ', 'ㄍㄨㄤ'] }, { word: '告訴', zhuyin: ['ㄍㄠˋ', 'ㄙㄨˋ'] }, { word: '快樂', zhuyin: ['ㄎㄨㄞˋ', 'ㄌㄜˋ'] }, { word: '不見', zhuyin: ['ㄅㄨˊ', 'ㄐㄧㄢˋ'] }, { word: '波紋', zhuyin: ['ㄅㄛ', 'ㄨㄣˊ'] }, { word: '一圈', zhuyin: ['ㄧˋ', 'ㄑㄩㄢ'] }, { word: '池塘', zhuyin: ['ㄔˊ', 'ㄊㄤˊ'] }, { word: '許多', zhuyin: ['ㄒㄩˇ', 'ㄉㄨㄛ'] }],
+                        'L12': [{ word: '加油', zhuyin: ['ㄐㄧㄚ', 'ㄧㄡˊ'] }, { word: '辛苦', zhuyin: ['ㄒㄧㄣ', 'ㄎㄨˇ'] }, { word: '地瓜苗', zhuyin: ['ㄉㄧˋ', 'ㄍㄨㄚ', 'ㄇㄧㄠˊ'] }, { word: '種田', zhuyin: ['ㄓㄨㄥˋ', 'ㄊㄧㄢˊ'] }, { word: '小豬', zhuyin: ['ㄒㄧㄠˇ', 'ㄓㄨ'] }, { word: '一半', zhuyin: ['ㄧˊ', 'ㄅㄢˋ'] }, { word: '不止', zhuyin: ['ㄅㄨˋ', 'ㄓˇ'] }, { word: '分享', zhuyin: ['ㄈㄣ', 'ㄒㄧㄤˇ'] }, { word: '地瓜葉', zhuyin: ['ㄉㄧˋ', 'ㄍㄨㄚ', 'ㄧㄝˋ'] }, { word: '收成', zhuyin: ['ㄕㄡ', 'ㄔㄥˊ'] }, { word: '不能', zhuyin: ['ㄅㄨˋ', 'ㄋㄥˊ'] }]
+                    },
+                    '多音字': {}, '形近字': {}, '成語': {}
+                }
+            },
+            hugo: {
+                id: 'hugo', title: 'Hugo (G4)',
+                categories: {
+                    '圈詞': { 
+                        'L7': [{ word: '攜手', zhuyin: ['ㄒㄧ', 'ㄕㄡˇ'] }, { word: '惡化', zhuyin: ['ㄜˋ', 'ㄏㄨㄚˋ'] }, { word: '導致', zhuyin: ['ㄉㄠˇ', 'ㄓˋ'] }, { word: '變遷', zhuyin: ['ㄅㄧㄢˋ', 'ㄑㄧㄢ'] }, { word: '平均', zhuyin: ['ㄆㄧㄥˊ', 'ㄐㄩㄣ'] }, { word: '分配', zhuyin: ['ㄈㄣ', 'ㄆㄟˋ'] }, { word: '饑荒', zhuyin: ['ㄐㄧ', 'ㄏㄨㄤ'] }, { word: '鍵盤', zhuyin: ['ㄐㄧㄢˋ', 'ㄆㄢˊ'] }, { word: '傳輸', zhuyin: ['ㄔㄨㄢˊ', 'ㄕㄨ'] }, { word: '移動', zhuyin: ['ㄧˊ', 'ㄉㄨㄥˋ'] }, { word: '足跡', zhuyin: ['ㄗㄨˊ', 'ㄐㄧ'] }],
+                        'L8': [{ word: '輕而易舉', zhuyin: ['ㄑㄧㄥ', 'ㄦˊ', 'ㄧˋ', 'ㄐㄩˇ'] }, { word: '研究', zhuyin: ['ㄧㄢˊ', 'ㄐㄧㄡˋ'] }, { word: '肢體', zhuyin: ['ㄓ', 'ㄊㄧˇ'] }, { word: '身懷絕技', zhuyin: ['ㄕㄣ', 'ㄏㄨㄞˊ', 'ㄐㄩㄝˊ', 'ㄐㄧˋ'] }, { word: '輕易', zhuyin: ['ㄑㄧㄥ', 'ㄧˋ'] }, { word: '構造', zhuyin: ['ㄍㄡˋ', 'ㄗㄠˋ'] }, { word: '腳趾', zhuyin: ['ㄐㄧㄠˇ', 'ㄓˇ'] }, { word: '得天獨厚', zhuyin: ['ㄉㄜˊ', 'ㄊㄧㄢ', 'ㄉㄨˊ', 'ㄌㄧㄥˋ'] }, { word: '看家本領', zhuyin: ['ㄎㄢ', 'ㄐㄧㄚ', 'ㄅㄣˇ', 'ㄌㄧㄥˇ'] }, { word: '與眾不同', zhuyin: ['ㄩˇ', 'ㄓㄨㄥˋ', 'ㄅㄨˋ', 'ㄊㄨㄥˊ'] }, { word: '壁虎', zhuyin: ['ㄅㄧˋ', 'ㄏㄨˇ'] }, { word: '絕技', zhuyin: ['ㄐㄩㄝˊ', 'ㄐㄧˋ'] }, { word: '易如反掌', zhuyin: ['ㄧˋ', 'ㄖㄨˊ', 'ㄈㄢˇ', 'ㄓㄤˇ'] }],
+                        'L9': [{ word: '催生', zhuyin: ['ㄘㄨㄟ', 'ㄕㄥ'] }, { word: '吸引', zhuyin: ['ㄒㄧ', 'ㄧㄣˇ'] }, { word: '嚮往', zhuyin: ['ㄒㄧㄤˋ', 'ㄨㄤˇ'] }, { word: '大富翁', zhuyin: ['ㄉㄚˋ', 'ㄈㄨˋ', 'ㄨㄥ'] }, { word: '太空總署', zhuyin: ['ㄊㄞˋ', 'ㄎㄨㄥ', 'ㄗㄨㄥˇ', 'ㄕㄨˇ'] }, { word: '探測', zhuyin: ['ㄊㄢˋ', 'ㄘㄜˋ'] }, { word: '嘗試', zhuyin: ['ㄔㄤˊ', 'ㄕˋ'] }, { word: '津津樂道', zhuyin: ['ㄐㄧㄣ', 'ㄐㄧㄣ', 'ㄌㄜˋ', 'ㄉㄠˋ'] }, { word: '阿姆斯壯', zhuyin: ['ㄚ', 'ㄇㄨˇ', 'ㄙ', 'ㄓㄨㄤˋ'] }, { word: '不僅', zhuyin: ['ㄅㄨˋ', 'ㄐㄧㄣˇ'] }],
+                        'L10': [{ word: '遺憾', zhuyin: ['ㄧˊ', 'ㄏㄢˋ'] }, { word: '耗盡', zhuyin: ['ㄏㄠˋ', 'ㄐㄧㄣˋ'] }, { word: '旱災', zhuyin: ['ㄏㄢˋ', 'ㄗㄞ'] }, { word: '水災', zhuyin: ['ㄕㄟˇ', 'ㄗㄞ'] }, { word: '萬丈', zhuyin: ['ㄨㄢˋ', 'ㄓㄤˋ'] }, { word: '寬廣', zhuyin: ['ㄎㄨㄢ', 'ㄍㄨㄤˇ'] }, { word: '一望無際', zhuyin: ['ㄧˊ', 'ㄨㄤˋ', 'ㄨˊ', 'ㄐㄧˋ'] }, { word: '禁不住', zhuyin: ['ㄐㄧㄣ', 'ㄅㄨˊ', 'ㄓㄨˋ'] }, { word: '打滾', zhuyin: ['ㄉㄚˇ', 'ㄍㄨㄣˇ'] }, { word: '忽然', zhuyin: ['ㄏㄨ', 'ㄖㄢˊ'] }, { word: '自豪', zhuyin: ['ㄗˋ', 'ㄏㄠˊ'] }],
+                        'L11': [{ word: '孤單', zhuyin: ['ㄍㄨ', 'ㄉㄢ'] }, { word: '淚水', zhuyin: ['ㄌㄟˋ', 'ㄕㄨㄟˇ'] }, { word: '依舊', zhuyin: ['ㄧ', 'ㄐㄧㄡˋ'] }, { word: '是否', zhuyin: ['ㄕˋ', 'ㄈㄡˇ'] }, { word: '浮現', zhuyin: ['ㄈㄨˊ', 'ㄒㄧㄢˋ'] }, { word: '映照', zhuyin: ['ㄧㄥˋ', 'ㄓㄠˋ'] }, { word: '冰霜', zhuyin: ['ㄅㄧㄥ', 'ㄕㄨㄤ'] }, { word: '吳剛', zhuyin: ['ㄨˊ', 'ㄍㄤ'] }, { word: '嫦娥', zhuyin: ['ㄔㄤˊ', 'ㄜˊ'] }, { word: '皎潔', zhuyin: ['ㄐㄧㄠˇ', 'ㄐㄧㄝˊ'] }],
+                        'L12': [{ word: '掀翻', zhuyin: ['ㄒㄧㄢ', 'ㄈㄢ'] }, { word: '呼風喚雨', zhuyin: ['ㄏㄨ', 'ㄈㄥ', 'ㄏㄨㄢˋ', 'ㄩˇ'] }, { word: '金箍棒', zhuyin: ['ㄐㄧㄣ', 'ㄍㄨ', 'ㄅㄤˋ'] }, { word: '筋斗雲', zhuyin: ['ㄐㄧㄣ', 'ㄉㄡˇ', 'ㄩㄣˊ'] }, { word: '乖乖', zhuyin: ['ㄍㄨㄞ', 'ㄍㄨㄞ'] }, { word: '壓住', zhuyin: ['ㄧㄚ', 'ㄓㄨˋ'] }, { word: '齊天大聖', zhuyin: ['ㄑㄧˊ', 'ㄊㄧㄢ', 'ㄉㄚˋ', 'ㄕㄥˋ'] }, { word: '掏出', zhuyin: ['ㄊㄠ', 'ㄔㄨ'] }, { word: '咒語', zhuyin: ['ㄓㄡˋ', 'ㄩˇ'] }, { word: '修行', zhuyin: ['ㄒㄧㄡ', 'ㄒㄧㄥˊ'] }]
+                    },
+                    '多音字': {}, '形近字': {}, '成語': {}
+                }
             }
-          },
-          hugo: { 
-            id: 'hugo', title: 'Hugo', 
-            sections: {
-              'L7 圈詞': [{ word: '攜手', zhuyin: ['ㄒㄧ', 'ㄕㄡˇ'] }, { word: '惡化', zhuyin: ['ㄜˋ', 'ㄏㄨㄚˋ'] }, { word: '導致', zhuyin: ['ㄉㄠˇ', 'ㄓˋ'] }, { word: '變遷', zhuyin: ['ㄅㄧㄢˋ', 'ㄑㄧㄢ'] }, { word: '平均', zhuyin: ['ㄆㄧㄥˊ', 'ㄐㄩㄣ'] }, { word: '分配', zhuyin: ['ㄈㄣ', 'ㄆㄟˋ'] }, { word: '饑荒', zhuyin: ['ㄐㄧ', 'ㄏㄨㄤ'] }, { word: '鍵盤', zhuyin: ['ㄐㄧㄢˋ', 'ㄆㄢˊ'] }, { word: '傳輸', zhuyin: ['ㄔㄨㄢˊ', 'ㄕㄨ'] }, { word: '移動', zhuyin: ['ㄧˊ', 'ㄉㄨㄥˋ'] }, { word: '足跡', zhuyin: ['ㄗㄨˊ', 'ㄐㄧ'] }],
-              'L8 圈詞': [{ word: '輕而易舉', zhuyin: ['ㄑㄧㄥ', 'ㄦˊ', 'ㄧˋ', 'ㄐㄩˇ'] }, { word: '研究', zhuyin: ['ㄧㄢˊ', 'ㄐㄧㄡˋ'] }, { word: '肢體', zhuyin: ['ㄓ', 'ㄊㄧˇ'] }, { word: '身懷絕技', zhuyin: ['ㄕㄣ', 'ㄏㄨㄞˊ', 'ㄐㄩㄝˊ', 'ㄐㄧˋ'] }, { word: '輕易', zhuyin: ['ㄑㄧㄥ', 'ㄧˋ'] }, { word: '構造', zhuyin: ['ㄍㄡˋ', 'ㄗㄠˋ'] }, { word: '腳趾', zhuyin: ['ㄐㄧㄠˇ', 'ㄓˇ'] }, { word: '得天獨厚', zhuyin: ['ㄉㄜˊ', 'ㄊㄧㄢ', 'ㄉㄨˊ', 'ㄌㄧㄥˋ'] }, { word: '看家本領', zhuyin: ['ㄎㄢ', 'ㄐㄧㄚ', 'ㄅㄣˇ', 'ㄌㄧㄥˇ'] }, { word: '與眾不同', zhuyin: ['ㄩˇ', 'ㄓㄨㄥˋ', 'ㄅㄨˋ', 'ㄊㄨㄥˊ'] }, { word: '壁虎', zhuyin: ['ㄅㄧˋ', 'ㄏㄨˇ'] }, { word: '絕技', zhuyin: ['ㄐㄩㄝˊ', 'ㄐㄧˋ'] }, { word: '易如反掌', zhuyin: ['ㄧˋ', 'ㄖㄨˊ', 'ㄈㄢˇ', 'ㄓㄤˇ'] }],
-              'L9 圈詞': [{ word: '催生', zhuyin: ['ㄘㄨㄟ', 'ㄕㄥ'] }, { word: '吸引', zhuyin: ['ㄒㄧ', 'ㄧㄣˇ'] }, { word: '嚮往', zhuyin: ['ㄒㄧㄤˋ', 'ㄨㄤˇ'] }, { word: '大富翁', zhuyin: ['ㄉㄚˋ', 'ㄈㄨˋ', 'ㄨㄥ'] }, { word: '太空總署', zhuyin: ['ㄊㄞˋ', 'ㄎㄨㄥ', 'ㄗㄨㄥˇ', 'ㄕㄨˇ'] }, { word: '探測', zhuyin: ['ㄊㄢˋ', 'ㄘㄜˋ'] }, { word: '嘗試', zhuyin: ['ㄔㄤˊ', 'ㄕˋ'] }, { word: '津津樂道', zhuyin: ['ㄐㄧㄣ', 'ㄐㄧㄣ', 'ㄌㄜˋ', 'ㄉㄠˋ'] }, { word: '阿姆斯壯', zhuyin: ['ㄚ', 'ㄇㄨˇ', 'ㄙ', 'ㄓㄨㄤˋ'] }, { word: '不僅', zhuyin: ['ㄅㄨˋ', 'ㄐㄧㄣˇ'] }],
-              'L10 圈詞': [{ word: '遺憾', zhuyin: ['ㄧˊ', 'ㄏㄢˋ'] }, { word: '耗盡', zhuyin: ['ㄏㄠˋ', 'ㄐㄧㄣˋ'] }, { word: '旱災', zhuyin: ['ㄏㄢˋ', 'ㄗㄞ'] }, { word: '水災', zhuyin: ['ㄕㄟˇ', 'ㄗㄞ'] }, { word: '萬丈', zhuyin: ['ㄨㄢˋ', 'ㄓㄤˋ'] }, { word: '寬廣', zhuyin: ['ㄎㄨㄢ', 'ㄍㄨㄤˇ'] }, { word: '一望無際', zhuyin: ['ㄧˊ', 'ㄨㄤˋ', 'ㄨˊ', 'ㄐㄧˋ'] }, { word: '禁不住', zhuyin: ['ㄐㄧㄣ', 'ㄅㄨˊ', 'ㄓㄨˋ'] }, { word: '打滾', zhuyin: ['ㄉㄚˇ', 'ㄍㄨㄣˇ'] }, { word: '忽然', zhuyin: ['ㄏㄨ', 'ㄖㄢˊ'] }, { word: '自豪', zhuyin: ['ㄗˋ', 'ㄏㄠˊ'] }],
-              'L11 圈詞': [{ word: '孤單', zhuyin: ['ㄍㄨ', 'ㄉㄢ'] }, { word: '淚水', zhuyin: ['ㄌㄟˋ', 'ㄕㄨㄟˇ'] }, { word: '依舊', zhuyin: ['ㄧ', 'ㄐㄧㄡˋ'] }, { word: '是否', zhuyin: ['ㄕˋ', 'ㄈㄡˇ'] }, { word: '浮現', zhuyin: ['ㄈㄨˊ', 'ㄒㄧㄢˋ'] }, { word: '映照', zhuyin: ['ㄧㄥˋ', 'ㄓㄠˋ'] }, { word: '冰霜', zhuyin: ['ㄅㄧㄥ', 'ㄕㄨㄤ'] }, { word: '吳剛', zhuyin: ['ㄨˊ', 'ㄍㄤ'] }, { word: '嫦娥', zhuyin: ['ㄔㄤˊ', 'ㄜˊ'] }, { word: '皎潔', zhuyin: ['ㄐㄧㄠˇ', 'ㄐㄧㄝˊ'] }],
-              'L12 圈詞': [{ word: '掀翻', zhuyin: ['ㄒㄧㄢ', 'ㄈㄢ'] }, { word: '呼風喚雨', zhuyin: ['ㄏㄨ', 'ㄈㄥ', 'ㄏㄨㄢˋ', 'ㄩˇ'] }, { word: '金箍棒', zhuyin: ['ㄐㄧㄣ', 'ㄍㄨ', 'ㄅㄤˋ'] }, { word: '筋斗雲', zhuyin: ['ㄐㄧㄣ', 'ㄉㄡˇ', 'ㄩㄣˊ'] }, { word: '乖乖', zhuyin: ['ㄍㄨㄞ', 'ㄍㄨㄞ'] }, { word: '壓住', zhuyin: ['ㄧㄚ', 'ㄓㄨˋ'] }, { word: '齊天大聖', zhuyin: ['ㄑㄧˊ', 'ㄊㄧㄢ', 'ㄉㄚˋ', 'ㄕㄥˋ'] }, { word: '掏出', zhuyin: ['ㄊㄠ', 'ㄔㄨ'] }, { word: '咒語', zhuyin: ['ㄓㄡˋ', 'ㄩˇ'] }, { word: '修行', zhuyin: ['ㄒㄧㄡ', 'ㄒㄧㄥˊ'] }]
-            }
-          }
         };
 
+        const { useState } = React;
+
         const ZhuyinBlock = ({ text }) => {
-          const cleanText = text.trim();
-          const tones = ['ˊ', 'ˇ', 'ˋ', '˙'];
-          let tone = '';
-          const chars = [];
-
-          // 分離聲調與注音符號
-          for (let char of cleanText) {
-            if (tones.includes(char)) {
-              tone = char;
-            } else {
-              chars.push(char);
+            const cleanText = text.trim();
+            const tones = ['ˊ', 'ˇ', 'ˋ', '˙'];
+            let tone = '';
+            const chars = [];
+            for (let char of cleanText) {
+                if (tones.includes(char)) tone = char;
+                else chars.push(char);
             }
-          }
-
-          return (
-            <div className="flex flex-col justify-between h-20 w-8 relative no-select">
-              {chars.map((char, index) => {
-                const isFirst = index === 0;
-                const isLast = index === chars.length - 1;
-
-                return (
-                  <div key={index} className="relative flex justify-center items-center flex-1 leading-none">
-                    {/* 注音符號本體 */}
-                    <span className="font-bold text-blue-900 text-3xl select-none">{char}</span>
-
-                    {/* 規則 1：一般聲調（ˊ、ˇ、ˋ）強制顯示在最後一個注音符號的右側 */}
-                    {isLast && tone && tone !== '˙' && (
-                      <span className="absolute left-full ml-2 text-2xl font-bold text-blue-900 leading-none select-none">
-                        {tone}
-                      </span>
-                    )}
-
-                    {/* 規則 2：輕聲（˙）強制顯示在第一個注音符號的正上方 */}
-                    {isFirst && tone === '˙' && (
-                      <span className="absolute bottom-full mb-1 text-2xl font-bold text-blue-900 leading-none left-1/2 -translate-x-1/2 select-none font-sans">
-                        ˙
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          );
+            return (
+                <div className="flex flex-col justify-between h-20 w-8 relative no-select">
+                    {chars.map((char, index) => {
+                        const isFirst = index === 0;
+                        const isLast = index === chars.length - 1;
+                        return (
+                            <div key={index} className="relative flex justify-center items-center flex-1 leading-none">
+                                <span className="font-bold text-blue-900 text-3xl select-none">{char}</span>
+                                {isLast && tone && tone !== '˙' && <span className="absolute left-full ml-2 text-2xl font-bold text-blue-900 leading-none select-none">{tone}</span>}
+                                {isFirst && tone === '˙' && <span className="absolute bottom-full mb-1 text-2xl font-bold text-blue-900 leading-none left-1/2 -translate-x-1/2 select-none">˙</span>}
+                            </div>
+                        );
+                    })}
+                </div>
+            );
         };
 
         function App() {
-          const [view, setView] = useState('home');
-          const [currentStudent, setCurrentStudent] = useState(null);
-          const [quiz, setQuiz] = useState({ items: [], sectionName: '', mode: null, index: 0, results: [], showAnswer: false });
+            const [view, setView] = useState('home');
+            const [student, setStudent] = useState(null);
+            const [category, setCategory] = useState(null);
+            const [quiz, setQuiz] = useState({ items: [], title: '', mode: 'char', index: 0, results: [], showAnswer: false });
 
-          const startQuiz = (items, sectionName, mode) => {
-            setQuiz({ items, sectionName, mode, index: 0, results: [], showAnswer: false });
-            setView('quiz');
-          };
+            const startQuiz = (items, title, mode) => {
+                setQuiz({ items, title, mode, index: 0, results: [], showAnswer: false });
+                setView('quiz');
+            };
 
-          const handleAnswer = (isCorrect) => {
-            const newResults = [...quiz.results, { item: quiz.items[quiz.index], isCorrect }];
-            if (quiz.index < quiz.items.length - 1) {
-              setQuiz({...quiz, index: quiz.index + 1, results: newResults, showAnswer: false});
-            } else {
-              setQuiz({...quiz, results: newResults});
-              setView('summary');
-            }
-          };
-
-          if (view === 'home') return (
-            <div className="min-h-screen bg-blue-50 p-8 flex flex-col items-center justify-center font-sans">
-              <h1 className="text-5xl font-bold text-blue-900 mb-20 drop-shadow-sm">📝 圈詞好棒棒</h1>
-              <div className="grid grid-cols-1 gap-10 w-full max-w-md">
-                {Object.entries(quizData).map(([key, data]) => (
-                  <button key={key} onClick={() => { setCurrentStudent(data); setView('student'); }} className="bg-white p-12 rounded-[2rem] shadow-xl border-4 border-blue-200 hover:border-blue-400 hover:shadow-2xl hover:-translate-y-1 transition-all text-4xl font-bold text-blue-800">
-                    {data.title}
-                  </button>
-                ))}
-              </div>
-            </div>
-          );
-
-          if (view === 'student') return (
-            <div className="min-h-screen bg-blue-50 p-8 font-sans max-w-2xl mx-auto">
-              <button onClick={() => setView('home')} className="mb-8 text-xl text-blue-700 font-bold hover:underline flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                返回
-              </button>
-              <h2 className="text-4xl font-bold text-blue-900 mb-8 text-center bg-blue-100 py-4 rounded-3xl">{currentStudent.title} 的任務</h2>
-              
-              {Object.keys(currentStudent.sections).length === 0 ? (
-                <div className="text-center text-gray-500 text-xl py-12 bg-white rounded-[2rem] shadow-lg">
-                  目前還沒有建立題庫喔！
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 gap-6 max-h-[70vh] overflow-y-auto pr-2">
-                  {Object.entries(currentStudent.sections).map(([name, items]) => (
-                    <div key={name} className="bg-white p-8 rounded-[2rem] shadow-lg border-2 border-blue-100 hover:border-blue-300 transition-colors">
-                      <h3 className="text-2xl font-bold text-gray-700 mb-6 tracking-wider border-b-2 border-blue-50 pb-4">{name} <span className="text-base font-normal text-gray-400 bg-gray-100 px-3 py-1 rounded-full ml-2">共 {items.length} 題</span></h3>
-                      <div className="flex gap-6">
-                        <button onClick={() => startQuiz(items, name, 'char')} className="flex-1 bg-blue-600 text-white py-5 rounded-2xl font-bold text-xl hover:bg-blue-700 hover:shadow-lg transition-all active:scale-95">考國字</button>
-                        <button onClick={() => startQuiz(items, name, 'zhuyin')} className="flex-1 bg-emerald-600 text-white py-5 rounded-2xl font-bold text-xl hover:bg-emerald-700 hover:shadow-lg transition-all active:scale-95">考注音</button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-
-          if (view === 'summary') {
-            const correctCount = quiz.results.filter(r => r.isCorrect).length;
-            const errors = quiz.results.filter(r => !r.isCorrect);
-            const score = Math.round((correctCount / quiz.items.length) * 100);
-            
-            return (
-              <div className="min-h-screen bg-blue-50 p-6 flex flex-col items-center justify-center font-sans">
-                <div className="bg-white p-10 rounded-[2rem] shadow-2xl w-full max-w-lg text-center border-t-8 border-blue-500">
-                  <h2 className="text-4xl font-bold mb-4 text-gray-800">練習結束！</h2>
-                  <div className="text-6xl mb-6">{score === 100 ? '🌟' : score >= 80 ? '👍' : '💪'}</div>
-                  <p className="text-2xl mb-8 text-gray-700">答對題數：<span className="font-bold text-emerald-600 text-3xl">{correctCount}</span> / {quiz.items.length}</p>
-                  
-                  {errors.length > 0 && (
-                    <div className="text-left bg-rose-50 p-6 rounded-2xl mb-8 border-2 border-rose-100">
-                      <h3 className="text-xl font-bold text-rose-800 mb-4 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                        需加強的題目：
-                      </h3>
-                      <div className="flex flex-col gap-3">
-                        {errors.map((err, i) => (
-                          <div key={i} className="flex justify-between items-center bg-white py-3 px-4 rounded-xl shadow-sm">
-                            <span className="font-bold text-2xl tracking-widest text-gray-800">{err.item.word}</span>
-                          </div>
+            if (view === 'home') return (
+                <div className="min-h-screen bg-blue-50 p-8 flex flex-col items-center justify-center">
+                    <h1 className="text-5xl font-bold text-blue-900 mb-20">📝 圈詞好棒棒</h1>
+                    <div className="grid grid-cols-1 gap-10 w-full max-w-md">
+                        {Object.entries(quizData).map(([key, data]) => (
+                            <button key={key} onClick={() => { setStudent(data); setView('category-select'); }} className="bg-white p-12 rounded-[2rem] shadow-xl border-4 border-blue-200 hover:border-blue-400 transition-all text-4xl font-bold text-blue-800">{data.title}</button>
                         ))}
-                      </div>
                     </div>
-                  )}
-                  
-                  <button onClick={() => setView('home')} className="w-full bg-blue-900 text-white py-6 rounded-2xl font-bold text-xl hover:bg-blue-800 hover:shadow-lg transition-all active:scale-95">回首頁</button>
                 </div>
-              </div>
             );
-          }
 
-          const item = quiz.items[quiz.index];
-          return (
-            <div className="min-h-screen bg-blue-50 p-6 flex flex-col items-center justify-center font-sans">
-              <div className="bg-white p-8 rounded-[2rem] shadow-2xl w-full max-w-lg">
-                <div className="flex justify-between items-center mb-6">
-                  <div className="font-bold text-blue-800 bg-blue-100 px-4 py-2 rounded-xl text-lg">{quiz.sectionName}</div>
-                  <div className="font-bold text-blue-500 text-lg bg-blue-50 px-4 py-2 rounded-xl">第 {quiz.index + 1} / {quiz.items.length} 題</div>
-                </div>
-                
-                {/* Progress Bar */}
-                <div className="w-full bg-gray-100 rounded-full h-2.5 mb-8">
-                  <div className="bg-blue-500 h-2.5 rounded-full transition-all duration-300" style={{ width: `${((quiz.index) / quiz.items.length) * 100}%` }}></div>
-                </div>
-
-                <div className="flex flex-col items-center gap-8 py-8 mb-4 max-h-[50vh] overflow-y-auto">
-                  {item.word.split('').map((char, i) => (
-                    <div key={i} className="flex gap-8 items-center border-b-2 border-dashed border-gray-100 pb-8 w-full justify-center last:border-0">
-                      <div className="w-28 h-28 border-4 border-blue-100 rounded-[2rem] flex items-center justify-center text-6xl font-bold bg-white shadow-inner text-gray-800 select-none">
-                        {quiz.showAnswer || quiz.mode === 'zhuyin' ? char : '？'}
-                      </div>
-                      <div className="h-28 flex items-center justify-center bg-gray-50 rounded-[2rem] px-4 w-28 shadow-inner border-2 border-gray-100">
-                        {quiz.showAnswer || quiz.mode === 'char' ? <ZhuyinBlock text={item.zhuyin[i]}/> : <div className="text-gray-400 font-bold text-xl select-none">注音</div>}
-                      </div>
+            if (view === 'category-select') return (
+                <div className="min-h-screen bg-blue-50 p-8 max-w-2xl mx-auto">
+                    <button onClick={() => setView('home')} className="mb-8 text-blue-700 font-bold hover:underline">← 返回</button>
+                    <h2 className="text-4xl font-bold text-blue-900 mb-8 text-center">{student.title} 的練習類別</h2>
+                    <div className="grid grid-cols-2 gap-4">
+                        {Object.keys(student.categories).map(cat => (
+                            <button key={cat} onClick={() => { setCategory(cat); setView('lesson-select'); }} className="bg-white p-6 rounded-2xl shadow-lg border-2 border-blue-100 font-bold text-xl text-blue-800 hover:border-blue-400">{cat}</button>
+                        ))}
                     </div>
-                  ))}
                 </div>
+            );
 
-                {!quiz.showAnswer ? 
-                  <button onClick={() => setQuiz({...quiz, showAnswer: true})} className="w-full bg-blue-600 text-white py-6 rounded-2xl font-bold text-2xl hover:bg-blue-700 hover:shadow-lg transition-all active:scale-95">查看答案</button> :
-                  <div className="flex gap-6 animate-fade-in">
-                    <button onClick={() => handleAnswer(false)} className="flex-1 bg-rose-500 text-white py-6 rounded-2xl font-bold text-2xl hover:bg-rose-600 hover:shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                      錯誤
-                    </button>
-                    <button onClick={() => handleAnswer(true)} className="flex-1 bg-emerald-500 text-white py-6 rounded-2xl font-bold text-2xl hover:bg-emerald-600 hover:shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                      正確
-                    </button>
-                  </div>
-                }
-              </div>
-            </div>
-          );
+            if (view === 'lesson-select') return (
+                <div className="min-h-screen bg-blue-50 p-8 max-w-2xl mx-auto">
+                    <button onClick={() => setView('category-select')} className="mb-8 text-blue-700 font-bold hover:underline">← 返回</button>
+                    <h2 className="text-3xl font-bold text-blue-900 mb-8 text-center">{category} 課次</h2>
+                    <div className="grid grid-cols-1 gap-4">
+                        {Object.entries(student.categories[category]).length > 0 ? Object.entries(student.categories[category]).map(([lesson, items]) => (
+                            <div key={lesson} className="bg-white p-6 rounded-2xl shadow-md border border-blue-100 flex justify-between items-center">
+                                <span className="text-xl font-bold">{lesson} ({items.length} 題)</span>
+                                <div className="flex gap-2">
+                                    <button onClick={() => startQuiz(items, `${category} ${lesson}`, 'char')} className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold">考國字</button>
+                                    <button onClick={() => startQuiz(items, `${category} ${lesson}`, 'zhuyin')} className="bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-bold">考注音</button>
+                                </div>
+                            </div>
+                        )) : <div className="text-center text-gray-500">此類別暫無題目</div>}
+                    </div>
+                </div>
+            );
+
+            if (view === 'quiz') {
+                const item = quiz.items[quiz.index];
+                return (
+                    <div className="min-h-screen bg-blue-50 p-6 flex flex-col items-center justify-center">
+                        <div className="bg-white p-8 rounded-[2rem] shadow-2xl w-full max-w-lg">
+                            <div className="flex justify-between mb-6">
+                                <span className="font-bold text-blue-800 bg-blue-100 px-4 py-2 rounded-xl">{quiz.title}</span>
+                                <span className="font-bold text-blue-500 bg-blue-50 px-4 py-2 rounded-xl">{quiz.index + 1} / {quiz.items.length}</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-8 py-8 mb-4">
+                                {item.word.split('').map((char, i) => (
+                                    <div key={i} className="flex gap-8 items-center w-full justify-center pb-8 border-b-2 last:border-0">
+                                        <div className="w-24 h-24 border-4 border-blue-100 rounded-2xl flex items-center justify-center text-5xl font-bold bg-white">{quiz.showAnswer || quiz.mode === 'zhuyin' ? char : '？'}</div>
+                                        <div className="h-24 flex items-center justify-center bg-gray-50 rounded-2xl px-2 w-24">
+                                            {quiz.showAnswer || quiz.mode === 'char' ? <ZhuyinBlock text={item.zhuyin[i]}/> : <span className="text-gray-400 font-bold">注音</span>}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            {!quiz.showAnswer ? 
+                                <button onClick={() => setQuiz({...quiz, showAnswer: true})} className="w-full bg-blue-600 text-white py-6 rounded-2xl font-bold text-2xl">查看答案</button> :
+                                <button onClick={() => { const next = quiz.index + 1; if(next < quiz.items.length) setQuiz({...quiz, index: next, showAnswer: false}); else setView('home'); }} className="w-full bg-emerald-500 text-white py-6 rounded-2xl font-bold text-2xl">下一題</button>
+                            }
+                        </div>
+                    </div>
+                );
+            }
+            return null;
         }
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
