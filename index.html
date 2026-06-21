@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📝 圈詞好棒棒</title>
+    <title>圈詞好棒棒應用程式</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
@@ -17,6 +17,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
+        // 題庫資料
         const quizData = {
             ian: {
                 id: 'ian', title: 'Ian (G1)',
@@ -30,20 +31,23 @@
                         'L12': [{ word: '加油', zhuyin: ['ㄐㄧㄚ', 'ㄧㄡˊ'] }, { word: '辛苦', zhuyin: ['ㄒㄧㄣ', 'ㄎㄨˇ'] }, { word: '地瓜苗', zhuyin: ['ㄉㄧˋ', 'ㄍㄨㄚ', 'ㄇㄧㄠˊ'] }, { word: '種田', zhuyin: ['ㄓㄨㄥˋ', 'ㄊㄧㄢˊ'] }, { word: '小豬', zhuyin: ['ㄒㄧㄠˇ', 'ㄓㄨ'] }, { word: '一半', zhuyin: ['ㄧˊ', 'ㄅㄢˋ'] }, { word: '不止', zhuyin: ['ㄅㄨˋ', 'ㄓˇ'] }, { word: '分享', zhuyin: ['ㄈㄣ', 'ㄒㄧㄤˇ'] }, { word: '地瓜葉', zhuyin: ['ㄉㄧˋ', 'ㄍㄨㄚ', 'ㄧㄝˋ'] }, { word: '收成', zhuyin: ['ㄕㄡ', 'ㄔㄥˊ'] }, { word: '不能', zhuyin: ['ㄅㄨˋ', 'ㄋㄥˊ'] }]
                     },
                     '多音字': {
-                        '練習': [
+                        '練習一': [
                             { word: '還是', zhuyin: ['ㄏㄞˊ', 'ㄕˋ'] }, { word: '還早', zhuyin: ['ㄏㄞˊ', 'ㄗㄠˇ'] }, { word: '還原', zhuyin: ['ㄏㄨㄢˊ', 'ㄩㄢˊ'] }, { word: '退還', zhuyin: ['ㄊㄨㄟˋ', 'ㄏㄨㄢˊ'] }, 
                             { word: '漂亮', zhuyin: ['ㄆㄧㄠˋ', 'ㄌㄧㄤˋ'] }, { word: '漂浮', zhuyin: ['ㄆㄧㄠ', 'ㄈㄨˊ'] }, { word: '漂流', zhuyin: ['ㄆㄧㄠ', 'ㄌㄧㄡˊ'] }, { word: '漂白', zhuyin: ['ㄆㄧㄠˇ', 'ㄅㄞˊ'] },
                             { word: '校隊', zhuyin: ['ㄒㄧㄠˋ', 'ㄉㄨㄟˋ'] }, { word: '校歌', zhuyin: ['ㄒㄧㄠˋ', 'ㄍㄜ'] }, { word: '校對', zhuyin: ['ㄐㄧㄠˋ', 'ㄉㄨㄟˋ'] }, { word: '校正', zhuyin: ['ㄐㄧㄠˋ', 'ㄓㄥˋ'] },
                             { word: '當面', zhuyin: ['ㄉㄤ', 'ㄇㄧㄢˋ'] }, { word: '當然', zhuyin: ['ㄉㄤ', 'ㄖㄢˊ'] }, { word: '妥當', zhuyin: ['ㄊㄨㄛˇ', 'ㄉㄤˋ'] }, { word: '上當', zhuyin: ['ㄕㄤˋ', 'ㄉㄤˋ'] }, { word: '當成', zhuyin: ['ㄉㄤˋ', 'ㄔㄥˊ'] },
                             { word: '小吃', zhuyin: ['ㄒㄧㄠˇ', 'ㄔ'] }, { word: '吃苦', zhuyin: ['ㄔ', 'ㄎㄨˇ'] }, { word: '口吃', zhuyin: ['ㄎㄡˇ', 'ㄐㄧˊ'] },
-                            { word: '埋藏', zhuyin: ['ㄇㄞˊ', 'ㄘㄤˊ'] }, { word: '埋沒', zhuyin: ['ㄇㄞˊ', 'ㄇㄛˋ'] }, { word: '埋怨', zhuyin: ['ㄇㄢˊ', 'ㄩㄢˋ'] },
+                            { word: '埋藏', zhuyin: ['ㄇㄞˊ', 'ㄘㄤˊ'] }
+                        ],
+                        '練習二': [
+                            { word: '埋沒', zhuyin: ['ㄇㄞˊ', 'ㄇㄛˋ'] }, { word: '埋怨', zhuyin: ['ㄇㄢˊ', 'ㄩㄢˋ'] },
                             { word: '生長', zhuyin: ['ㄕㄥ', 'ㄓㄤˇ'] }, { word: '年長', zhuyin: ['ㄋㄧㄢˊ', 'ㄓㄤˇ'] }, { word: '專長', zhuyin: ['ㄓㄨㄢ', 'ㄔㄤˊ'] }, { word: '長度', zhuyin: ['ㄔㄤˊ', 'ㄉㄨˋ'] },
                             { word: '睡覺', zhuyin: ['ㄕㄨㄟˋ', 'ㄐㄧㄠˋ'] }, { word: '午覺', zhuyin: ['ㄨˇ', 'ㄐㄧㄠˋ'] }, { word: '發覺', zhuyin: ['ㄈㄚ', 'ㄐㄩㄝˊ'] }, { word: '感覺', zhuyin: ['ㄍㄢˇ', 'ㄐㄩㄝˊ'] },
                             { word: '種菜', zhuyin: ['ㄓㄨㄥˋ', 'ㄘㄞˋ'] }, { word: '種植', zhuyin: ['ㄓㄨㄥˋ', 'ㄓˊ'] }, { word: '種子', zhuyin: ['ㄓㄨㄥˇ', 'ㄗˇ'] }, { word: '各種', zhuyin: ['ㄍㄜˋ', 'ㄓㄨㄥˇ'] },
                             { word: '分開', zhuyin: ['ㄈㄣ', 'ㄎㄞ'] }, { word: '平分', zhuyin: ['ㄆㄧㄥˊ', 'ㄈㄣ'] }, { word: '身分', zhuyin: ['ㄕㄣ', 'ㄈㄣˋ'] }, { word: '部分', zhuyin: ['ㄅㄨˋ', 'ㄈㄣˋ'] },
                             { word: '幾乎', zhuyin: ['ㄐㄧ', 'ㄏㄨ'] }, { word: '幾許', zhuyin: ['ㄐㄧˇ', 'ㄒㄩˇ'] }, { word: '未幾', zhuyin: ['ㄨㄟˋ', 'ㄐㄧˇ'] }
                         ]
-                    }, '形近字': {}, '成語': {}
+                    }
                 }
             },
             hugo: {
@@ -57,7 +61,48 @@
                         'L11': [{ word: '孤單', zhuyin: ['ㄍㄨ', 'ㄉㄢ'] }, { word: '淚水', zhuyin: ['ㄌㄟˋ', 'ㄕㄨㄟˇ'] }, { word: '依舊', zhuyin: ['ㄧ', 'ㄐㄧㄡˋ'] }, { word: '是否', zhuyin: ['ㄕˋ', 'ㄈㄡˇ'] }, { word: '浮現', zhuyin: ['ㄈㄨˊ', 'ㄒㄧㄢˋ'] }, { word: '映照', zhuyin: ['ㄧㄥˋ', 'ㄓㄠˋ'] }, { word: '冰霜', zhuyin: ['ㄅㄧㄥ', 'ㄕㄨㄤ'] }, { word: '吳剛', zhuyin: ['ㄨˊ', 'ㄍㄤ'] }, { word: '嫦娥', zhuyin: ['ㄔㄤˊ', 'ㄜˊ'] }, { word: '皎潔', zhuyin: ['ㄐㄧㄠˇ', 'ㄐㄧㄝˊ'] }],
                         'L12': [{ word: '掀翻', zhuyin: ['ㄒㄧㄢ', 'ㄈㄢ'] }, { word: '呼風喚雨', zhuyin: ['ㄏㄨ', 'ㄈㄥ', 'ㄏㄨㄢˋ', 'ㄩˇ'] }, { word: '金箍棒', zhuyin: ['ㄐㄧㄣ', 'ㄍㄨ', 'ㄅㄤˋ'] }, { word: '筋斗雲', zhuyin: ['ㄐㄧㄣ', 'ㄉㄡˇ', 'ㄩㄣˊ'] }, { word: '乖乖', zhuyin: ['ㄍㄨㄞ', 'ㄍㄨㄞ'] }, { word: '壓住', zhuyin: ['ㄧㄚ', 'ㄓㄨˋ'] }, { word: '齊天大聖', zhuyin: ['ㄑㄧˊ', 'ㄊㄧㄢ', 'ㄉㄚˋ', 'ㄕㄥˋ'] }, { word: '掏出', zhuyin: ['ㄊㄠ', 'ㄔㄨ'] }, { word: '咒語', zhuyin: ['ㄓㄡˋ', 'ㄩˇ'] }, { word: '修行', zhuyin: ['ㄒㄧㄡ', 'ㄒㄧㄥˊ'] }]
                     },
-                    '多音字': {}, '形近字': {}, '成語': {}
+                    '多音字': {
+                        'G4練習': [
+                            { word: '校對', zhuyin: ['ㄐㄧㄠˋ', 'ㄉㄨㄟˋ'] }, { word: '學校', zhuyin: ['ㄒㄩㄝˊ', 'ㄒㄧㄠˋ'] },
+                            { word: '可惡', zhuyin: ['ㄎㄜˇ', 'ㄨˋ'] }, { word: '惡化', zhuyin: ['ㄜˋ', 'ㄏㄨㄚˋ'] },
+                            { word: '禁止', zhuyin: ['ㄐㄧㄣˋ', 'ㄓˇ'] }, { word: '不禁', zhuyin: ['ㄅㄨˋ', 'ㄐㄧㄣ'] },
+                            { word: '否極泰來', zhuyin: ['ㄆㄧˇ', 'ㄐㄧˊ', 'ㄊㄞˋ', 'ㄌㄞˊ'] }, { word: '是否', zhuyin: ['ㄕˋ', 'ㄈㄡˇ'] },
+                            { word: '贈遺', zhuyin: ['ㄗㄥˋ', 'ㄨㄟˋ'] }, { word: '遺忘', zhuyin: ['ㄧˊ', 'ㄨㄤˊ'] },
+                            { word: '勾當', zhuyin: ['ㄍㄡˋ', 'ㄉㄤˋ'] }, { word: '勾起', zhuyin: ['ㄍㄡ', 'ㄑㄧˇ'] },
+                            { word: '舌苔', zhuyin: ['ㄕㄜˊ', 'ㄊㄞ'] }, { word: '青苔', zhuyin: ['ㄑㄧㄥ', 'ㄊㄞˊ'] },
+                            { word: '狂風怒號', zhuyin: ['ㄎㄨㄤˊ', 'ㄈㄥ', 'ㄋㄨˋ', 'ㄏㄠˊ'] }, { word: '發號施令', zhuyin: ['ㄈㄚ', 'ㄏㄠˋ', 'ㄕ', 'ㄌㄧㄥˋ'] }, { word: '部署', zhuyin: ['ㄅㄨˋ', 'ㄕㄨˋ'] }, { word: '衛生署', zhuyin: ['ㄨㄟˋ', 'ㄕㄥ', 'ㄕㄨˇ'] }
+                        ]
+                    },
+                    '成語': {
+                        '練習一 (1-12)': [
+                            { question: '警察分析現場找到的(　　　　)，終於抓到了搶匪。', options: ['蛛絲馬跡', '盤根錯節', '舉棋不定', '不著邊際'], answer: '蛛絲馬跡' },
+                            { question: '看到過去居住的小鎮已經變成大城市，讓離鄉多年的他有種(　　　　)的感慨。', options: ['物換星移', '泰山壓卵', '塞翁失馬', '眾望所歸'], answer: '物換星移' },
+                            { question: '這棵百年的大榕樹，生得(　　　　)，枝葉茂密。', options: ['盤根錯節', '骨瘦如柴', '蛛絲馬跡', '並駕齊驅'], answer: '盤根錯節' },
+                            { question: '一大清早，已經有許多群眾(　　　　)聚集在廣場，一起響應這次的公益活動。', options: ['扶老攜幼', '聲淚俱下', '集思廣益', '不修邊幅'], answer: '扶老攜幼' },
+                            { question: '他這次當選主席，真可謂是(　　　　)。', options: ['眾望所歸', '才高八斗', '絕無僅有', '不遺餘力'], answer: '眾望所歸' },
+                            { question: '他可是舉重冠軍，抬個櫃子簡直(　　　　)。', options: ['易如反掌', '牛刀小試', '泰山壓卵', '集思廣益'], answer: '易如反掌' },
+                            { question: '請你別再(　　　　)了，機會稍縱即逝。', options: ['舉棋不定', '不著邊際', '孤陋寡聞', '不修邊幅'], answer: '舉棋不定' },
+                            { question: '這幕舞台劇，精彩得令人(　　　　)。', options: ['拍案叫絕', '津津有味', '聲淚俱下', '無妄之災'], answer: '拍案叫絕' },
+                            { question: '機智問答時，他對所有問題都能應答如流，真是(　　　　)哇！', options: ['才高八斗', '眾望所歸', '孤陋寡聞', '絕無僅有'], answer: '才高八斗' },
+                            { question: '別看他(　　　　)的模樣，做起事來非常認真，一點兒也不馬虎。', options: ['不修邊幅', '骨瘦如柴', '舉棋不定', '扶老攜幼'], answer: '不修邊幅' },
+                            { question: '這兩項商品都十分優良，因此銷售狀況也是(　　　　)。', options: ['並駕齊驅', '盤根錯節', '蛛絲馬跡', '雪上加霜'], answer: '並駕齊驅' },
+                            { question: '原以為這場仗如(　　　　)，沒想到打了三個月還分不出勝負。', options: ['泰山壓卵', '易如反掌', '無妄之災', '塞翁失馬'], answer: '泰山壓卵' }
+                        ],
+                        '練習二 (13-24)': [
+                            { question: '強烈颱風吹倒了許多人的房子，這場(　　　　)給大家帶來慘重的財物損失。', options: ['無妄之災', '雪上加霜', '物換星移', '泰山壓卵'], answer: '無妄之災' },
+                            { question: '經過多次的討論，大家(　　　　)，終於做出讓大家都滿意的報告。', options: ['集思廣益', '眾望所歸', '並駕齊驅', '不遺餘力'], answer: '集思廣益' },
+                            { question: '即使人們認為他的夢想(　　　　)，但他並不灰心，在持續努力下，終於成功。', options: ['不著邊際', '舉棋不定', '孤陋寡聞', '不修邊幅'], answer: '不著邊際' },
+                            { question: '只要是親友們有需求，他都(　　　　)的伸出援手。', options: ['不遺餘力', '集思廣益', '扶老攜幼', '拍案叫絕'], answer: '不遺餘力' },
+                            { question: '難民營裡的孩子個個營養不足，(　　　　)，迫切需要各界伸出援手。', options: ['骨瘦如柴', '不修邊幅', '盤根錯節', '孤陋寡聞'], answer: '骨瘦如柴' },
+                            { question: '他最近不但失業，健康又出了問題，真是(　　　　)啊！', options: ['雪上加霜', '無妄之災', '泰山壓卵', '塞翁失馬'], answer: '雪上加霜' },
+                            { question: '演到傷心處，不只演員(　　　　)，連臺下的觀眾也紛紛跟著掉淚。', options: ['聲淚俱下', '拍案叫絕', '津津有味', '扶老攜幼'], answer: '聲淚俱下' },
+                            { question: '關於現代舞的知識，我實在(　　　　)得很，不敢隨便評論，以免鬧出笑話。', options: ['孤陋寡聞', '不著邊際', '舉棋不定', '才高八斗'], answer: '孤陋寡聞' },
+                            { question: '眼前的美景在世界上(　　　　)，令人陶醉。', options: ['絕無僅有', '物換星移', '眾望所歸', '並駕齊驅'], answer: '絕無僅有' },
+                            { question: '這部電影的情節十分吸引人，大家都看得(　　　　)，十分過癮。', options: ['津津有味', '拍案叫絕', '不著邊際', '集思廣益'], answer: '津津有味' },
+                            { question: '他是飯店的主廚，家常小菜對他而言不過是(　　　　)。', options: ['牛刀小試', '易如反掌', '泰山壓卵', '才高八斗'], answer: '牛刀小試' },
+                            { question: '眼前吃點虧不需要太在意，所謂(　　　　)，說不定能獲得更多福氣。', options: ['塞翁失馬', '物換星移', '無妄之災', '雪上加霜'], answer: '塞翁失馬' }
+                        ]
+                    }
                 }
             }
         };
@@ -80,9 +125,9 @@
                         const isLast = index === chars.length - 1;
                         return (
                             <div key={index} className="relative flex justify-center items-center flex-1 leading-none">
-                                <span className="font-bold text-blue-900 text-3xl select-none">{char}</span>
-                                {isLast && tone && tone !== '˙' && <span className="absolute left-full ml-2 text-2xl font-bold text-blue-900 leading-none select-none">{tone}</span>}
-                                {isFirst && tone === '˙' && <span className="absolute bottom-full mb-1 text-2xl font-bold text-blue-900 leading-none left-1/2 -translate-x-1/2 select-none">˙</span>}
+                                <span className="font-bold text-blue-900 text-xl sm:text-2xl select-none">{char}</span>
+                                {isLast && tone && tone !== '˙' && <span className="absolute left-full ml-1 text-lg font-bold text-blue-900 leading-none select-none">{tone}</span>}
+                                {isFirst && tone === '˙' && <span className="absolute bottom-full mb-0.5 text-lg font-bold text-blue-900 leading-none left-1/2 -translate-x-1/2 select-none">˙</span>}
                             </div>
                         );
                     })}
@@ -94,76 +139,246 @@
             const [view, setView] = useState('home');
             const [student, setStudent] = useState(null);
             const [category, setCategory] = useState(null);
-            const [quiz, setQuiz] = useState({ items: [], title: '', mode: 'char', index: 0, results: [], showAnswer: false });
+            const [quiz, setQuiz] = useState({ 
+                items: [], title: '', mode: 'char', index: 0, 
+                showAnswer: false, selectedOption: null, isCorrect: null,
+                errors: []
+            });
 
             const startQuiz = (items, title, mode) => {
-                setQuiz({ items, title, mode, index: 0, results: [], showAnswer: false });
+                let enhancedItems = [...items];
+                
+                if (mode === 'poly') {
+                    const charMap = {};
+                    Object.values(student.categories['多音字']).forEach(lessonItems => {
+                        lessonItems.forEach(it => {
+                            it.word.split('').forEach((char, i) => {
+                                if (!charMap[char]) charMap[char] = new Set();
+                                charMap[char].add(it.zhuyin[i]);
+                            });
+                        });
+                    });
+                    enhancedItems = enhancedItems.map(it => {
+                        const pIndex = it.word.split('').findIndex(char => charMap[char] && charMap[char].size > 1);
+                        let opts = [];
+                        if (pIndex !== -1) {
+                            opts = Array.from(charMap[it.word[pIndex]]).sort(() => Math.random() - 0.5);
+                        }
+                        return { ...it, polyCharIndex: pIndex, options: opts };
+                    });
+                } else if (mode === 'idiom') {
+                    enhancedItems = enhancedItems.map(it => ({
+                        ...it,
+                        word: it.answer, 
+                        shuffledOptions: [...it.options].sort(() => Math.random() - 0.5)
+                    }));
+                }
+                
+                setQuiz({ items: enhancedItems, title, mode, index: 0, showAnswer: false, selectedOption: null, isCorrect: null, errors: [] });
                 setView('quiz');
             };
 
+            const endQuiz = () => setView('results');
+
             if (view === 'home') return (
                 <div className="min-h-screen bg-blue-50 p-8 flex flex-col items-center justify-center">
-                    <h1 className="text-5xl font-bold text-blue-900 mb-20">📝 圈詞好棒棒</h1>
+                    <h1 className="text-5xl font-bold text-blue-900 mb-20 text-center drop-shadow-md">📝 圈詞好棒棒</h1>
                     <div className="grid grid-cols-1 gap-10 w-full max-w-md">
                         {Object.entries(quizData).map(([key, data]) => (
-                            <button key={key} onClick={() => { setStudent(data); setView('category-select'); }} className="bg-white p-12 rounded-[2rem] shadow-xl border-4 border-blue-200 hover:border-blue-400 transition-all text-4xl font-bold text-blue-800">{data.title}</button>
+                            <button key={key} onClick={() => { setStudent(data); setView('category-select'); }} className="bg-white p-12 rounded-[2rem] shadow-xl border-4 border-blue-200 hover:border-blue-400 hover:-translate-y-1 transition-all text-4xl font-bold text-blue-800">{data.title}</button>
                         ))}
                     </div>
                 </div>
             );
 
+            if (view === 'results') return (
+                <div className="min-h-screen bg-blue-50 p-8 flex flex-col items-center justify-center">
+                    <h2 className="text-4xl font-bold text-blue-900 mb-8">練習結果</h2>
+                    {quiz.errors.length === 0 ? <p className="text-3xl text-emerald-600 font-bold bg-white px-8 py-6 rounded-3xl shadow-lg border-2 border-emerald-100">🎉 太棒了！全部答對！</p> : (
+                        <div className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-lg border-2 border-red-100">
+                            <h3 className="text-2xl font-bold mb-6 text-red-600">需要加強的項目：</h3>
+                            <div className="flex flex-col gap-3">
+                                {quiz.errors.map((item, i) => (
+                                    <div key={i} className="px-6 py-4 bg-red-50 rounded-xl font-bold text-xl text-red-800 flex justify-between">
+                                        <span>{item.word || item.answer}</span>
+                                        <span className="text-red-500/50">需要複習</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    <button onClick={() => setView('home')} className="mt-12 bg-blue-600 hover:bg-blue-700 transition-colors text-white px-10 py-4 rounded-2xl font-bold shadow-lg text-xl">返回首頁</button>
+                </div>
+            );
+
             if (view === 'category-select') return (
-                <div className="min-h-screen bg-blue-50 p-8 max-w-2xl mx-auto">
-                    <button onClick={() => setView('home')} className="mb-8 text-blue-700 font-bold hover:underline">← 返回</button>
-                    <h2 className="text-4xl font-bold text-blue-900 mb-8 text-center">{student.title} 的練習類別</h2>
-                    <div className="grid grid-cols-2 gap-4">
+                <div className="min-h-screen bg-blue-50 p-8 max-w-2xl mx-auto flex flex-col justify-center">
+                    <button onClick={() => setView('home')} className="self-start mb-8 text-blue-700 font-bold hover:underline flex items-center text-lg">← 返回首頁</button>
+                    <h2 className="text-4xl font-bold text-blue-900 mb-12 text-center">{student.title} 的練習類別</h2>
+                    <div className="grid sm:grid-cols-2 gap-6">
                         {Object.keys(student.categories).map(cat => (
-                            <button key={cat} onClick={() => { setCategory(cat); setView('lesson-select'); }} className="bg-white p-6 rounded-2xl shadow-lg border-2 border-blue-100 font-bold text-xl text-blue-800 hover:border-blue-400">{cat}</button>
+                            <button key={cat} onClick={() => { setCategory(cat); setView('lesson-select'); }} className="bg-white p-8 rounded-3xl shadow-lg border-2 border-blue-100 font-bold text-2xl text-blue-800 hover:border-blue-400 hover:-translate-y-1 transition-all">{cat}</button>
                         ))}
                     </div>
                 </div>
             );
 
             if (view === 'lesson-select') return (
-                <div className="min-h-screen bg-blue-50 p-8 max-w-2xl mx-auto">
-                    <button onClick={() => setView('category-select')} className="mb-8 text-blue-700 font-bold hover:underline">← 返回</button>
-                    <h2 className="text-3xl font-bold text-blue-900 mb-8 text-center">{category} 課次</h2>
+                <div className="min-h-screen bg-blue-50 p-6 sm:p-8 max-w-3xl mx-auto flex flex-col">
+                    <button onClick={() => setView('category-select')} className="self-start mb-8 text-blue-700 font-bold hover:underline flex items-center text-lg">← 返回類別</button>
+                    <h2 className="text-4xl font-bold text-blue-900 mb-8 text-center">{category} 課次</h2>
                     <div className="grid grid-cols-1 gap-4">
                         {Object.entries(student.categories[category]).length > 0 ? Object.entries(student.categories[category]).map(([lesson, items]) => (
-                            <div key={lesson} className="bg-white p-6 rounded-2xl shadow-md border border-blue-100 flex justify-between items-center">
-                                <span className="text-xl font-bold">{lesson} ({items.length} 題)</span>
-                                <div className="flex gap-2">
-                                    <button onClick={() => startQuiz(items, `${category} ${lesson}`, 'char')} className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold">考國字</button>
-                                    <button onClick={() => startQuiz(items, `${category} ${lesson}`, 'zhuyin')} className="bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-bold">考注音</button>
+                            <div key={lesson} className="bg-white p-6 rounded-2xl shadow-sm border border-blue-100 flex flex-col sm:flex-row justify-between items-center gap-4 hover:shadow-md transition-shadow">
+                                <span className="text-2xl font-bold text-blue-900">{lesson} <span className="text-lg text-blue-500 font-normal">({items.length} 題)</span></span>
+                                <div className="flex flex-wrap gap-3 justify-center">
+                                    {category === '多音字' ? (
+                                        <button onClick={() => startQuiz(items, `${category} ${lesson}`, 'poly')} className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-xl text-lg font-bold transition-colors shadow-md">開始測驗</button>
+                                    ) : category === '成語' ? (
+                                        <button onClick={() => startQuiz(items, `${category} ${lesson}`, 'idiom')} className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-3 rounded-xl text-lg font-bold transition-colors shadow-md">開始測驗</button>
+                                    ) : (
+                                        <>
+                                            <button onClick={() => startQuiz(items, `${category} ${lesson}`, 'char')} className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl text-lg font-bold transition-colors shadow-md">考國字</button>
+                                            <button onClick={() => startQuiz(items, `${category} ${lesson}`, 'zhuyin')} className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl text-lg font-bold transition-colors shadow-md">考注音</button>
+                                        </>
+                                    )}
                                 </div>
                             </div>
-                        )) : <div className="text-center text-gray-500">此類別暫無題目</div>}
+                        )) : <div className="text-center text-gray-500 py-10 bg-white rounded-2xl">此類別暫無題目</div>}
                     </div>
                 </div>
             );
 
             if (view === 'quiz') {
                 const item = quiz.items[quiz.index];
-                return (
-                    <div className="min-h-screen bg-blue-50 p-6 flex flex-col items-center justify-center">
-                        <div className="bg-white p-8 rounded-[2rem] shadow-2xl w-full max-w-lg">
-                            <div className="flex justify-between mb-6">
-                                <span className="font-bold text-blue-800 bg-blue-100 px-4 py-2 rounded-xl">{quiz.title}</span>
-                                <span className="font-bold text-blue-500 bg-blue-50 px-4 py-2 rounded-xl">{quiz.index + 1} / {quiz.items.length}</span>
+                
+                if (quiz.mode === 'idiom') {
+                    return (
+                        <div className="min-h-screen bg-blue-50 p-4 sm:p-6 flex flex-col items-center justify-center">
+                            <div className="bg-white p-6 sm:p-8 rounded-[2.5rem] shadow-xl w-full max-w-lg">
+                                <div className="flex justify-between items-center mb-6">
+                                    <span className="font-bold text-blue-800 bg-blue-100 px-5 py-2 rounded-xl text-lg">{quiz.title}</span>
+                                    <span className="font-bold text-blue-600 bg-blue-50 px-5 py-2 rounded-xl text-lg border border-blue-100">{quiz.index + 1} / {quiz.items.length}</span>
+                                </div>
+                                
+                                <div className="py-10 px-6 mb-6 bg-amber-50 rounded-3xl shadow-inner border border-amber-100 text-center">
+                                    <h3 className="text-2xl sm:text-3xl font-bold text-amber-900 leading-relaxed">{item.question}</h3>
+                                </div>
+                                
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-6">
+                                    {item.shuffledOptions.map((opt, idx) => {
+                                        const isCorrect = opt === item.answer;
+                                        let btnClass = "bg-white border-blue-100 hover:border-blue-400 hover:-translate-y-1 shadow-sm text-blue-900";
+                                        
+                                        if (quiz.showAnswer) {
+                                            if (isCorrect) btnClass = "bg-emerald-50 border-emerald-400 shadow-md text-emerald-700";
+                                            else if (quiz.selectedOption === idx) btnClass = "bg-red-50 border-red-400 text-red-700";
+                                            else btnClass = "bg-gray-50 border-gray-100 opacity-40 text-gray-400";
+                                        }
+
+                                        return (
+                                            <button key={idx} 
+                                                disabled={quiz.showAnswer}
+                                                onClick={() => {
+                                                    const newErrors = isCorrect ? quiz.errors : [...quiz.errors, item];
+                                                    setQuiz({...quiz, selectedOption: idx, isCorrect, showAnswer: true, errors: newErrors});
+                                                }}
+                                                className={`p-5 rounded-2xl border-2 text-center transition-all flex justify-center items-center text-2xl font-bold ${btnClass}`}>
+                                                {opt}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+
+                                {quiz.showAnswer && (
+                                    <button onClick={() => { 
+                                        if(quiz.index + 1 < quiz.items.length) { 
+                                            setQuiz({...quiz, index: quiz.index + 1, showAnswer: false, selectedOption: null}); 
+                                        } else { 
+                                            endQuiz(); 
+                                        } 
+                                    }} className="w-full bg-emerald-500 hover:bg-emerald-600 transition-colors text-white py-4 rounded-2xl font-bold text-xl shadow-lg mt-2 animate-pulse">
+                                        下一題
+                                    </button>
+                                )}
                             </div>
-                            <div className="flex flex-col items-center gap-8 py-8 mb-4">
+                        </div>
+                    );
+                }
+
+                if (quiz.mode === 'poly') {
+                    const polyCharIndex = item.polyCharIndex;
+                    const options = item.options || [];
+                    const correctZhuyin = polyCharIndex !== -1 ? item.zhuyin[polyCharIndex] : '';
+                    
+                    return (
+                        <div className="min-h-screen bg-blue-50 p-4 sm:p-6 flex flex-col items-center justify-center">
+                            <div className="bg-white p-6 sm:p-8 rounded-[2.5rem] shadow-xl w-full max-w-lg">
+                                <div className="flex justify-between items-center mb-6">
+                                    <span className="font-bold text-blue-800 bg-blue-100 px-5 py-2 rounded-xl text-lg">{quiz.title}</span>
+                                    <span className="font-bold text-blue-600 bg-blue-50 px-5 py-2 rounded-xl text-lg border border-blue-100">{quiz.index + 1} / {quiz.items.length}</span>
+                                </div>
+                                <div className="flex flex-wrap items-center justify-center gap-3 py-6 mb-6 bg-blue-50 rounded-3xl shadow-inner border border-blue-100">
+                                    {item.word.split('').map((char, i) => (
+                                        <div key={i} className="flex flex-col items-center gap-2">
+                                            <div className="w-16 h-16 sm:w-20 sm:h-20 border-2 border-blue-200 rounded-2xl flex items-center justify-center text-4xl font-bold bg-white shadow-sm text-blue-900">{char}</div>
+                                            <div className="h-20 flex items-center justify-center bg-white border border-blue-100 rounded-xl px-1 w-16 sm:w-20 shadow-sm">
+                                                {i === polyCharIndex && !quiz.showAnswer ? <span className="text-gray-300 font-bold text-2xl">？</span> : <ZhuyinBlock text={item.zhuyin[i]} />}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="flex flex-wrap justify-center gap-2 w-full mb-6">
+                                    {options.map((opt, idx) => (
+                                        <button key={idx} onClick={() => {
+                                            const isCorrect = opt === correctZhuyin;
+                                            const newErrors = isCorrect ? quiz.errors : [...quiz.errors, item];
+                                            setQuiz({...quiz, selectedOption: idx, isCorrect, showAnswer: true, errors: newErrors});
+                                        }} disabled={quiz.showAnswer} className={`p-2 rounded-xl border-2 text-center transition-all flex justify-center items-center h-24 w-24 ${quiz.showAnswer ? (opt === correctZhuyin ? 'bg-emerald-50 border-emerald-400 shadow-md' : (quiz.selectedOption === idx ? 'bg-red-50 border-red-400' : 'bg-gray-50 border-gray-100 opacity-40')) : 'bg-white border-blue-100 hover:border-blue-400 hover:-translate-y-1 shadow-sm'}`}>
+                                            <ZhuyinBlock text={opt} />
+                                        </button>
+                                    ))}
+                                </div>
+                                {quiz.showAnswer && <button onClick={() => { if(quiz.index + 1 < quiz.items.length) { setQuiz({...quiz, index: quiz.index + 1, showAnswer: false, selectedOption: null}); } else { endQuiz(); } }} className="w-full bg-emerald-500 hover:bg-emerald-600 transition-colors text-white py-4 rounded-2xl font-bold text-xl shadow-lg mt-2 animate-pulse">下一題</button>}
+                            </div>
+                        </div>
+                    );
+                }
+
+                return (
+                    <div className="min-h-screen bg-blue-50 p-4 sm:p-6 flex flex-col items-center justify-center">
+                        <div className="bg-white p-6 sm:p-8 rounded-[2.5rem] shadow-xl w-full max-w-lg">
+                            <div className="flex justify-between items-center mb-8">
+                                <span className="font-bold text-blue-800 bg-blue-100 px-5 py-2 rounded-xl text-lg">{quiz.title}</span>
+                                <span className="font-bold text-blue-600 bg-blue-50 px-5 py-2 rounded-xl text-lg border border-blue-100">{quiz.index + 1} / {quiz.items.length}</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-6 py-6 mb-6">
                                 {item.word.split('').map((char, i) => (
-                                    <div key={i} className="flex gap-8 items-center w-full justify-center pb-8 border-b-2 last:border-0">
-                                        <div className="w-24 h-24 border-4 border-blue-100 rounded-2xl flex items-center justify-center text-5xl font-bold bg-white">{quiz.showAnswer || quiz.mode === 'zhuyin' ? char : '？'}</div>
-                                        <div className="h-24 flex items-center justify-center bg-gray-50 rounded-2xl px-2 w-24">
-                                            {quiz.showAnswer || quiz.mode === 'char' ? <ZhuyinBlock text={item.zhuyin[i]}/> : <span className="text-gray-400 font-bold">注音</span>}
+                                    <div key={i} className="flex gap-6 sm:gap-8 items-center w-full justify-center">
+                                        <div className="w-24 h-28 sm:w-28 sm:h-32 border-4 border-blue-100 rounded-2xl flex items-center justify-center text-5xl sm:text-6xl font-bold bg-white text-blue-900 shadow-sm">{quiz.showAnswer || quiz.mode === 'zhuyin' ? char : '？'}</div>
+                                        <div className="h-28 sm:h-32 flex items-center justify-center bg-gray-50 border-2 border-gray-100 rounded-2xl px-2 w-24 sm:w-28 shadow-sm">
+                                            {quiz.showAnswer || quiz.mode === 'char' ? <ZhuyinBlock text={item.zhuyin[i]}/> : <span className="text-gray-300 font-bold text-2xl">注音</span>}
                                         </div>
                                     </div>
                                 ))}
                             </div>
                             {!quiz.showAnswer ? 
-                                <button onClick={() => setQuiz({...quiz, showAnswer: true})} className="w-full bg-blue-600 text-white py-6 rounded-2xl font-bold text-2xl">查看答案</button> :
-                                <button onClick={() => { const next = quiz.index + 1; if(next < quiz.items.length) setQuiz({...quiz, index: next, showAnswer: false}); else setView('home'); }} className="w-full bg-emerald-500 text-white py-6 rounded-2xl font-bold text-2xl">下一題</button>
+                                <button onClick={() => setQuiz({...quiz, showAnswer: true})} className="w-full bg-blue-600 hover:bg-blue-700 transition-colors text-white py-6 rounded-2xl font-bold text-2xl shadow-lg mt-4">查看答案</button> :
+                                <div className="grid grid-cols-2 gap-4 mt-4">
+                                    <button onClick={() => { 
+                                        if(quiz.index + 1 < quiz.items.length) setQuiz({...quiz, index: quiz.index + 1, showAnswer: false}); 
+                                        else endQuiz(); 
+                                    }} className="bg-emerald-500 hover:bg-emerald-600 transition-colors text-white py-6 rounded-2xl font-bold text-xl shadow-md">我答對了！</button>
+                                    <button onClick={() => { 
+                                        const newErrors = [...quiz.errors, item]; 
+                                        if(quiz.index + 1 < quiz.items.length) {
+                                            setQuiz({...quiz, index: quiz.index + 1, showAnswer: false, errors: newErrors}); 
+                                        } else {
+                                            setQuiz({...quiz, errors: newErrors});
+                                            endQuiz(); 
+                                        }
+                                    }} className="bg-red-500 hover:bg-red-600 transition-colors text-white py-6 rounded-2xl font-bold text-xl shadow-md">我答錯了！</button>
+                                </div>
                             }
                         </div>
                     </div>
