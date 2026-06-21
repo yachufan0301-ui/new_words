@@ -291,7 +291,7 @@
                                     <h3 className="text-2xl sm:text-3xl font-bold text-amber-900 leading-relaxed">{item.question}</h3>
                                 </div>
                                 
-                                <div className="grid grid-cols-1 gap-4 w-full mb-6">
+                                    <div className="grid grid-cols-1 gap-4 w-full mb-6">
                                     {item.shuffledOptions.map((opt, idx) => {
                                         const isCorrect = opt.text === item.answer;
                                         let btnClass = "bg-white border-blue-100 hover:border-blue-400 hover:-translate-y-1 shadow-sm text-blue-900";
@@ -309,9 +309,9 @@
                                                     const newErrors = isCorrect ? quiz.errors : [...quiz.errors, item];
                                                     setQuiz({...quiz, selectedOption: idx, isCorrect, showAnswer: true, errors: newErrors});
                                                 }}
-                                                className={`p-5 rounded-2xl border-2 transition-all flex items-center text-2xl font-bold ${btnClass}`}>
-                                                <span className="flex-1 text-center">{opt.text}</span>
-                                                <div className="flex gap-1">
+                                                className={`p-5 rounded-2xl border-2 transition-all flex flex-row items-center text-2xl font-bold ${btnClass}`}>
+                                                <span className="flex-1 text-center whitespace-nowrap text-3xl">{opt.text}</span>
+                                                <div className="flex flex-row gap-1 ml-4 items-center">
                                                   {opt.zhuyin.map((z, i) => <ZhuyinBlock key={i} text={z} />)}
                                                 </div>
                                             </button>
