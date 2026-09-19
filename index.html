@@ -19,18 +19,135 @@
     <script type="text/babel">
         const quizData = {
             ian: {
-                id: 'ian', title: 'Ian (G1)',
+                id: 'ian', title: 'Ian (G2)',
                 categories: {
                     '圈詞': {
-                        'L7': [{ word: '蛋糕', zhuyin: ['ㄉㄢˋ', 'ㄍㄠ'] }, { word: '漂亮', zhuyin: ['ㄆㄧㄠˋ', 'ㄌㄧㄤˋ'] }, { word: '老師', zhuyin: ['ㄌㄠˇ', 'ㄕ'] }, { word: '感謝', zhuyin: ['ㄍㄢˇ', 'ㄒㄧㄝˋ'] }, { word: '笑臉', zhuyin: ['ㄒㄧㄠˋ', 'ㄌㄧㄢˇ'] }, { word: '一張', zhuyin: ['ㄧˋ', 'ㄓㄤ'] }, { word: '祝福', zhuyin: ['ㄓㄨˋ', 'ㄈㄨˊ'] }, { word: '一顆', zhuyin: ['ㄧˋ', 'ㄎㄜ'] }, { word: '畫畫', zhuyin: ['ㄏㄨㄚˋ', 'ㄏㄨㄚˋ'] }],
-                        'L8': [{ word: '敬上', zhuyin: ['ㄐㄧㄥˋ', 'ㄕㄤˋ'] }, { word: '長大', zhuyin: ['ㄓㄤˇ', 'ㄉㄚˋ'] }, { word: '很久', zhuyin: ['ㄏㄣˇ', 'ㄐㄧㄡˇ'] }, { word: '埋進', zhuyin: ['ㄇㄞˊ', 'ㄐㄧㄣˋ'] }, { word: '地方', zhuyin: ['ㄉㄧˋ', 'ㄈㄤ'] }, { word: '果子', zhuyin: ['ㄍㄨㄛˇ', 'ㄗ˙'] }, { word: '秋天', zhuyin: ['ㄑㄧㄡ', 'ㄊㄧㄢ'] }, { word: '卡片', zhuyin: ['ㄎㄚˇ', 'ㄆㄧㄢˋ'] }, { word: '松鼠', zhuyin: ['ㄙㄨㄥ', 'ㄕㄨˇ'] }],
-                        'L9': [{ word: '當成', zhuyin: ['ㄉㄤˋ', 'ㄔㄥˊ'] }, { word: '一樣', zhuyin: ['ㄧˊ', 'ㄧㄤˋ'] }, { word: '學校', zhuyin: ['ㄒㄩㄝˊ', 'ㄒㄧㄠˋ'] }, { word: '一邊', zhuyin: ['ㄧˋ', 'ㄅㄧㄢ'] }, { word: '工作', zhuyin: ['ㄍㄨㄥ', 'ㄗㄨㄛˋ'] }, { word: '校園', zhuyin: ['ㄒㄧㄠˋ', 'ㄩㄢˊ'] }, { word: '早上', zhuyin: ['ㄗㄠˇ', 'ㄕㄤˋ'] }, { word: '寶貝', zhuyin: ['ㄅㄠˇ', 'ㄅㄟˋ'] }, { word: '奶奶', zhuyin: ['ㄋㄞˇ', 'ㄋㄞ˙'] }],
-                        'L10': [{ word: '青蛙', zhuyin: ['ㄑㄧㄥ', 'ㄨㄚ'] }, { word: '裝不下', zhuyin: ['ㄓㄨㄤ', 'ㄅㄨˊ', 'ㄒㄧㄚˋ'] }, { word: '世界', zhuyin: ['ㄕˋ', 'ㄐㄧㄝˋ'] }, { word: '幾天', zhuyin: ['ㄐㄧˇ', 'ㄊㄧㄢ'] }, { word: '一窪', zhuyin: ['ㄧˋ', 'ㄨㄚ'] }, { word: '說大話', zhuyin: ['ㄕㄨㄛ', 'ㄉㄚˋ', 'ㄏㄨㄚˋ'] }, { word: '肚子', zhuyin: ['ㄉㄨˋ', 'ㄗ˙'] }, { word: '東西', zhuyin: ['ㄉㄨㄥ', 'ㄒㄧ˙'] }, { word: '睡覺', zhuyin: ['ㄕㄨㄟˋ', 'ㄐㄧㄠˋ'] }, { word: '除了', zhuyin: ['ㄔㄨˊ', 'ㄌㄜ˙'] }, { word: '一隻', zhuyin: ['ㄧˋ', 'ㄓ'] }],
-                        'L11': [{ word: '外面', zhuyin: ['ㄨㄞˋ', 'ㄇㄧㄢˋ'] }, { word: '鴨子', zhuyin: ['ㄧㄚ', 'ㄗ˙'] }, { word: '星星', zhuyin: ['ㄒㄧㄥ', '˙ㄒㄧㄥ'] }, { word: '奇怪', zhuyin: ['ㄑㄧˊ', 'ㄍㄨㄞˋ'] }, { word: '吃光', zhuyin: ['ㄔ', 'ㄍㄨㄤ'] }, { word: '告訴', zhuyin: ['ㄍㄠˋ', 'ㄙㄨˋ'] }, { word: '快樂', zhuyin: ['ㄎㄨㄞˋ', 'ㄌㄜˋ'] }, { word: '不見', zhuyin: ['ㄅㄨˊ', 'ㄐㄧㄢˋ'] }, { word: '波紋', zhuyin: ['ㄅㄛ', 'ㄨㄣˊ'] }, { word: '一圈', zhuyin: ['ㄧˋ', 'ㄑㄩㄢ'] }, { word: '池塘', zhuyin: ['ㄔˊ', 'ㄊㄤˊ'] }, { word: '許多', zhuyin: ['ㄒㄩˇ', 'ㄉㄨㄛ'] }],
-                        'L12': [{ word: '加油', zhuyin: ['ㄐㄧㄚ', 'ㄧㄡˊ'] }, { word: '辛苦', zhuyin: ['ㄒㄧㄣ', 'ㄎㄨˇ'] }, { word: '地瓜苗', zhuyin: ['ㄉㄧˋ', 'ㄍㄨㄚ', 'ㄇㄧㄠˊ'] }, { word: '種田', zhuyin: ['ㄓㄨㄥˋ', 'ㄊㄧㄢˊ'] }, { word: '小豬', zhuyin: ['ㄒㄧㄠˇ', 'ㄓㄨ'] }, { word: '一半', zhuyin: ['ㄧˊ', 'ㄅㄢˋ'] }, { word: '不止', zhuyin: ['ㄅㄨˋ', 'ㄓˇ'] }, { word: '分享', zhuyin: ['ㄈㄣ', 'ㄒㄧㄤˇ'] }, { word: '地瓜葉', zhuyin: ['ㄉㄧˋ', 'ㄍㄨㄚ', 'ㄧㄝˋ'] }, { word: '收成', zhuyin: ['ㄕㄡ', 'ㄔㄥˊ'] }, { word: '不能', zhuyin: ['ㄅㄨˋ', 'ㄋㄥˊ'] }]
+                        'L1': [
+                            { word: '打招呼', zhuyin: ['ㄉㄚˇ', 'ㄓㄠ', 'ㄏㄨ'] },
+                            { word: '白雲', zhuyin: ['ㄅㄞˊ', 'ㄩㄣˊ'] },
+                            { word: '向前', zhuyin: ['ㄒㄧㄤˋ', 'ㄑㄧㄢˊ'] },
+                            { word: '噴出', zhuyin: ['ㄆㄣ', 'ㄔㄨ'] },
+                            { word: '美麗', zhuyin: ['ㄇㄟˇ', 'ㄌㄧˋ'] },
+                            { word: '水柱', zhuyin: ['ㄕㄨㄟˇ', 'ㄓㄨˋ'] },
+                            { word: '試一試', zhuyin: ['ㄕˋ', 'ㄧˋ', 'ㄕˋ'] },
+                            { word: '用力', zhuyin: ['ㄩㄥˋ', 'ㄌㄧˋ'] },
+                            { word: '第一次', zhuyin: ['ㄉㄧˋ', 'ㄧˊ', 'ㄘˋ'] },
+                            { word: '成功', zhuyin: ['ㄔㄥˊ', 'ㄍㄨㄥ'] },
+                            { word: '柔順', zhuyin: ['ㄖㄡˊ', 'ㄕㄨㄣˋ'] },
+                            { word: '游泳', zhuyin: ['ㄧㄡˊ', 'ㄩㄥˇ'] },
+                            { word: '考試', zhuyin: ['ㄎㄠˇ', 'ㄕˋ'] },
+                            { word: '試飛', zhuyin: ['ㄕˋ', 'ㄈㄟ'] },
+                            { word: '呼吸', zhuyin: ['ㄏㄨ', 'ㄒㄧ'] },
+                            { word: '吸氣', zhuyin: ['ㄒㄧ', 'ㄑㄧˋ'] },
+                            { word: '又要', zhuyin: ['ㄧㄡˋ', 'ㄧㄠˋ'] },
+                            { word: '功能', zhuyin: ['ㄍㄨㄥ', 'ㄋㄥˊ'] },
+                            { word: '擠牛奶', zhuyin: ['ㄐㄧˇ', 'ㄋㄧㄡˊ', 'ㄋㄞˇ'] }
+                        ],
+                        'L2': [
+                            { word: '梯子', zhuyin: ['ㄊㄧ', 'ㄗ˙'] },
+                            { word: '格子', zhuyin: ['ㄍㄜˊ', 'ㄗ˙'] },
+                            { word: '白紙', zhuyin: ['ㄅㄞˊ', 'ㄓˇ'] },
+                            { word: '好像', zhuyin: ['ㄏㄠˇ', 'ㄒㄧㄤˋ'] },
+                            { word: '身高', zhuyin: ['ㄕㄣ', 'ㄍㄠ'] },
+                            { word: '生日', zhuyin: ['ㄕㄥ', 'ㄖˋ'] },
+                            { word: '迫不及待', zhuyin: ['ㄆㄛˋ', 'ㄅㄨˋ', 'ㄐㄧˊ', 'ㄉㄞˋ'] },
+                            { word: '頭頂', zhuyin: ['ㄊㄡˊ', 'ㄉㄧㄥˇ'] },
+                            { word: '線條', zhuyin: ['ㄒㄧㄢˋ', 'ㄊㄧㄠˊ'] },
+                            { word: '沿著', zhuyin: ['ㄧㄢˊ', 'ㄓㄜ˙'] },
+                            { word: '一條', zhuyin: ['ㄧˋ', 'ㄊㄧㄠˊ'] },
+                            { word: '哪一天', zhuyin: ['ㄋㄚˇ', 'ㄧˋ', 'ㄊㄧㄢ'] },
+                            { word: '最高', zhuyin: ['ㄗㄨㄟˋ', 'ㄍㄠ'] },
+                            { word: '才能', zhuyin: ['ㄘㄞˊ', 'ㄋㄥˊ'] },
+                            { word: '沿路', zhuyin: ['ㄧㄢˊ', 'ㄌㄨˋ'] },
+                            { word: '站著', zhuyin: ['ㄓㄢˋ', 'ㄓㄜ˙'] },
+                            { word: '及格', zhuyin: ['ㄐㄧˊ', 'ㄍㄜˊ'] },
+                            { word: '強迫', zhuyin: ['ㄑㄧㄤˊ', 'ㄆㄛˋ'] },
+                            { word: '出生', zhuyin: ['ㄔㄨ', 'ㄕㄥ'] },
+                            { word: '紙張', zhuyin: ['ㄓˇ', 'ㄓㄤ'] }
+                        ],
+                        'L3': [
+                            { word: '勇氣', zhuyin: ['ㄩㄥˇ', 'ㄑㄧˋ'] },
+                            { word: '教室', zhuyin: ['ㄐㄧㄠˋ', 'ㄕˋ'] },
+                            { word: '葉子', zhuyin: ['ㄧㄝˋ', 'ㄗ˙'] },
+                            { word: '克服', zhuyin: ['ㄎㄜˋ', 'ㄈㄨˊ'] },
+                            { word: '害怕', zhuyin: ['ㄏㄞˋ', 'ㄆㄚˋ'] },
+                            { word: '努力', zhuyin: ['ㄋㄨˇ', 'ㄌㄧˋ'] },
+                            { word: '完成', zhuyin: ['ㄨㄢˊ', 'ㄔㄥˊ'] },
+                            { word: '跌倒', zhuyin: ['ㄉㄧㄝˊ', 'ㄉㄠˇ'] },
+                            { word: '騎車', zhuyin: ['ㄑㄧˊ', 'ㄔㄜ'] },
+                            { word: '故事', zhuyin: ['ㄍㄨˋ', 'ㄕˋ'] },
+                            { word: '一棵樹', zhuyin: ['ㄧˋ', 'ㄎㄜ', 'ㄕㄨˋ'] },
+                            { word: '時間', zhuyin: ['ㄕˊ', 'ㄐㄧㄢ'] },
+                            { word: '事情', zhuyin: ['ㄕˋ', 'ㄑㄧㄥˊ'] },
+                            { word: '雷聲', zhuyin: ['ㄌㄟˊ', 'ㄕㄥ'] },
+                            { word: '不用', zhuyin: ['ㄅㄨˊ', 'ㄩㄥˋ'] },
+                            { word: '怕黑', zhuyin: ['ㄆㄚˋ', 'ㄏㄟ'] },
+                            { word: '低低地', zhuyin: ['ㄉㄧ', 'ㄉㄧ', 'ㄉㄜ˙'] },
+                            { word: '教書', zhuyin: ['ㄐㄧㄠ', 'ㄕㄨ'] },
+                            { word: '教學', zhuyin: ['ㄐㄧㄠ', 'ㄒㄩㄝˊ'] },
+                            { word: '倒數', zhuyin: ['ㄉㄠˋ', 'ㄕㄨˇ'] }
+                        ],
+                        'L4': [
+                            { word: '一塊地', zhuyin: ['ㄧˊ', 'ㄎㄨㄞˋ', 'ㄉㄧˋ'] },
+                            { word: '圓形', zhuyin: ['ㄩㄢˊ', 'ㄒㄧㄥˊ'] },
+                            { word: '吃飯', zhuyin: ['ㄔ', 'ㄈㄢˋ'] },
+                            { word: '做功課', zhuyin: ['ㄗㄨㄛˋ', 'ㄍㄨㄥ', 'ㄎㄜˋ'] },
+                            { word: '洗澡', zhuyin: ['ㄒㄧˇ', 'ㄗㄠˇ'] },
+                            { word: '收拾', zhuyin: ['ㄕㄡ', 'ㄕˊ'] },
+                            { word: '整理', zhuyin: ['ㄓㄥˋ', 'ㄌㄧˇ'] },
+                            { word: '書包', zhuyin: ['ㄕㄨ', 'ㄅㄠ'] },
+                            { word: '遊戲', zhuyin: ['ㄧㄡˊ', 'ㄒㄧˋ'] },
+                            { word: '芝麻餅', zhuyin: ['ㄓ', 'ㄇㄚ', 'ㄅㄧㄥˇ'] },
+                            { word: '剩下', zhuyin: ['ㄕㄥˋ', 'ㄒㄧㄚˋ'] },
+                            { word: '咬住', zhuyin: ['ㄧㄠˇ', 'ㄓㄨˋ'] },
+                            { word: '月餅', zhuyin: ['ㄩㄝˋ', 'ㄅㄧㄥˇ'] },
+                            { word: '形狀', zhuyin: ['ㄒㄧㄥˊ', 'ㄓㄨㄤˋ'] }
+                        ],
+                        'L5': [
+                            { word: '書蟲', zhuyin: ['ㄕㄨ', 'ㄔㄨㄥˊ'] },
+                            { word: '森林', zhuyin: ['ㄙㄣ', 'ㄌㄧㄣˊ'] },
+                            { word: '動物', zhuyin: ['ㄉㄨㄥˋ', 'ㄨˋ'] },
+                            { word: '大王', zhuyin: ['ㄉㄚˋ', 'ㄨㄤˊ'] },
+                            { word: '下午', zhuyin: ['ㄒㄧㄚˋ', 'ㄨˇ'] },
+                            { word: '一座山', zhuyin: ['ㄧˊ', 'ㄗㄨㄛˋ', 'ㄕㄢ'] },
+                            { word: '著急', zhuyin: ['ㄓㄠˊ', 'ㄐㄧˊ'] },
+                            { word: '圖書館', zhuyin: ['ㄊㄨˊ', 'ㄕㄨˋ', 'ㄍㄨㄢˇ'] },
+                            { word: '百科全書', zhuyin: ['ㄅㄞˇ', 'ㄎㄜ', 'ㄑㄩㄢˊ', 'ㄕㄨ'] },
+                            { word: '原來', zhuyin: ['ㄩㄢˊ', 'ㄌㄞˊ'] },
+                            { word: '從此', zhuyin: ['ㄘㄨㄥˊ', 'ㄘˇ'] },
+                            { word: '從容', zhuyin: ['ㄘㄨㄥˊ', 'ㄖㄨㄥˊ'] },
+                            { word: '不管', zhuyin: ['ㄅㄨˋ', 'ㄍㄨㄢˇ'] },
+                            { word: '一種方法', zhuyin: ['ㄧˋ', 'ㄓㄨㄥˇ', 'ㄈㄤ', 'ㄈㄚˇ'] },
+                            { word: '管理', zhuyin: ['ㄍㄨㄢˇ', 'ㄌㄧˇ'] },
+                            { word: '此時', zhuyin: ['ㄘˇ', 'ㄕˊ'] },
+                            { word: '從來', zhuyin: ['ㄘㄨㄥˊ', 'ㄌㄞˊ'] },
+                            { word: '草原', zhuyin: ['ㄘㄠˇ', 'ㄩㄢˊ'] },
+                            { word: '完全', zhuyin: ['ㄨㄢˊ', 'ㄑㄩㄢˊ'] },
+                            { word: '種田', zhuyin: ['ㄓㄨㄥˋ', 'ㄊㄧㄢˊ'] },
+                            { word: '種子', zhuyin: ['ㄓㄨㄥˇ', 'ㄗˇ'] }
+                        ],
+                        'L6': [
+                            { word: '自己', zhuyin: ['ㄗˋ', 'ㄐㄧˇ'] },
+                            { word: '沙灘', zhuyin: ['ㄕㄚ', 'ㄊㄢ'] },
+                            { word: '撿垃圾', zhuyin: ['ㄐㄧㄢˇ', 'ㄌㄜˋ', 'ㄙㄜˋ'] },
+                            { word: '減少', zhuyin: ['ㄐㄧㄢˇ', 'ㄕㄠˇ'] },
+                            { word: '目前', zhuyin: ['ㄇㄨˋ', 'ㄑㄧㄢˊ'] },
+                            { word: '塑膠', zhuyin: ['ㄙㄨˋ', 'ㄐㄧㄠ'] },
+                            { word: '他們', zhuyin: ['ㄊㄚ', '˙ㄇㄣ'] },
+                            { word: '安全', zhuyin: ['ㄢ', 'ㄑㄩㄢˊ'] },
+                            { word: '如果', zhuyin: ['ㄖㄨˊ', 'ㄍㄨㄛˇ'] },
+                            { word: '便條', zhuyin: ['ㄅㄧㄢˋ', 'ㄊㄧㄠˊ'] },
+                            { word: '留下來', zhuyin: ['ㄌㄧㄡˊ', 'ㄒㄧㄚˋ', 'ㄌㄞˊ'] },
+                            { word: '對待', zhuyin: ['ㄉㄨㄟˋ', 'ㄉㄞˋ'] },
+                            { word: '去吧', zhuyin: ['ㄑㄩˋ', 'ㄅㄚ˙'] },
+                            { word: '不該', zhuyin: ['ㄅㄨˋ', 'ㄍㄞ'] },
+                            { word: '如同', zhuyin: ['ㄖㄨˊ', 'ㄊㄨㄥˊ'] },
+                            { word: '便宜', zhuyin: ['ㄆㄧㄢˊ', 'ㄧˊ'] },
+                            { word: '少年', zhuyin: ['ㄕㄠˋ', 'ㄋㄧㄢˊ'] }
+                        ]
                     },
                     '成語': {
-                        'G1成語': [
+                        'G2成語': [
                             { question: '他們的學業表現(　　　　)。', options: [{text:'平分秋色', zhuyin:['ㄆㄧㄥˊ','ㄈㄣ','ㄑㄧㄡ','ㄙㄜˋ']}, {text:'得寸進尺', zhuyin:['ㄉㄜˊ','ㄘㄨㄣˋ','ㄐㄧㄣˋ','ㄔˇ']}, {text:'畫蛇添足', zhuyin:['ㄏㄨㄚˋ','ㄕㄜˊ','ㄊㄧㄢ','ㄗㄨˊ']}, {text:'雪中送炭', zhuyin:['ㄒㄩㄝˇ','ㄓㄨㄥ','ㄙㄨㄥˋ','ㄊㄢˋ']}], answer: '平分秋色' },
                             { question: '哥哥已經把玩具讓給你，別再(　　　　)，提出無理要求。', options: [{text:'得寸進尺', zhuyin:['ㄉㄜˊ','ㄘㄨㄣˋ','ㄐㄧㄣˋ','ㄔˇ']}, {text:'揠苗助長', zhuyin:['ㄧㄚˋ','ㄇㄧㄠˊ','ㄓㄨˋ','ㄓㄤˇ']}, {text:'老馬識途', zhuyin:['ㄌㄠˇ','ㄇㄚˇ','ㄕˋ','ㄊㄨˊ']}, {text:'坐井觀天', zhuyin:['ㄗㄨㄛˋ','ㄐㄧㄥˇ','ㄍㄨㄢ','ㄊㄧㄢ']}], answer: '得寸進尺' },
                             { question: '作品已經很完美，若還要加上幾筆，反而(　　　　)。', options: [{text:'畫蛇添足', zhuyin:['ㄏㄨㄚˋ','ㄕㄜˊ','ㄊㄧㄢ','ㄗㄨˊ']}, {text:'雪中送炭', zhuyin:['ㄒㄩㄝˇ','ㄓㄨㄥ','ㄙㄨㄥˋ','ㄊㄢˋ']}, {text:'愁眉苦臉', zhuyin:['ㄔㄡˊ','ㄇㄟˊ','ㄎㄨˇ','ㄌㄧㄢˇ']}, {text:'相敬如賓', zhuyin:['ㄒㄧㄤ','ㄐㄧㄥˋ','ㄖㄨˊ','ㄅㄧㄣ']}], answer: '畫蛇添足' },
@@ -55,28 +172,9 @@
                             { question: '這個團體因一場誤會，造成(　　　　)。', options: [{text:'四分五裂', zhuyin:['ㄙˋ','ㄈㄣ','ㄨˇ','ㄌㄧㄝˋ']}, {text:'平分秋色', zhuyin:['ㄆㄧㄥˊ','ㄈㄣ','ㄑㄧㄡ','ㄙㄜˋ']}, {text:'得寸進尺', zhuyin:['ㄉㄜˊ','ㄘㄨㄣˋ','ㄐㄧㄣˋ','ㄔˇ']}, {text:'畫蛇添足', zhuyin:['ㄏㄨㄚˋ','ㄕㄜˊ','ㄊㄧㄢ','ㄗㄨˊ']}], answer: '四分五裂' }
                         ]
                     },
-                    '多音字': {
-                        '練習一': [
-                            { word: '還是', zhuyin: ['ㄏㄞˊ', 'ㄕˋ'] }, { word: '還早', zhuyin: ['ㄏㄞˊ', 'ㄗㄠˇ'] }, { word: '還原', zhuyin: ['ㄏㄨㄢˊ', 'ㄩㄢˊ'] }, { word: '退還', zhuyin: ['ㄊㄨㄟˋ', 'ㄏㄨㄢˊ'] }, 
-                            { word: '漂亮', zhuyin: ['ㄆㄧㄠˋ', 'ㄌㄧㄤˋ'] }, { word: '漂浮', zhuyin: ['ㄆㄧㄠ', 'ㄈㄨˊ'] }, { word: '漂流', zhuyin: ['ㄆㄧㄠ', 'ㄌㄧㄡˊ'] }, { word: '漂白', zhuyin: ['ㄆㄧㄠˇ', 'ㄅㄞˊ'] },
-                            { word: '校隊', zhuyin: ['ㄒㄧㄠˋ', 'ㄉㄨㄟˋ'] }, { word: '校歌', zhuyin: ['ㄒㄧㄠˋ', 'ㄍㄜ'] }, { word: '校對', zhuyin: ['ㄐㄧㄠˋ', 'ㄉㄨㄟˋ'] }, { word: '校正', zhuyin: ['ㄐㄧㄠˋ', 'ㄓㄥˋ'] },
-                            { word: '當面', zhuyin: ['ㄉㄤ', 'ㄇㄧㄢˋ'] }, { word: '當然', zhuyin: ['ㄉㄤ', 'ㄖㄢˊ'] }, { word: '妥當', zhuyin: ['ㄊㄨㄛˇ', 'ㄉㄤˋ'] },  { word: '上當', zhuyin: ['ㄕㄤˋ', 'ㄉㄤˋ'] }, { word: '當成', zhuyin: ['ㄉㄤˋ', 'ㄔㄥˊ'] },
-                            { word: '小吃', zhuyin: ['ㄒㄧㄠˇ', 'ㄔ'] }, { word: '吃苦', zhuyin: ['ㄔ', 'ㄎㄨˇ'] }, { word: '口吃', zhuyin: ['ㄎㄡˇ', 'ㄐㄧˊ'] },
-                            { word: '埋藏', zhuyin: ['ㄇㄞˊ', 'ㄘㄤˊ'] }
-                        ],
-                        '練習二': [
-                            { word: '埋沒', zhuyin: ['ㄇㄞˊ', 'ㄇㄛˋ'] }, { word: '埋怨', zhuyin: ['ㄇㄢˊ', 'ㄩㄢˋ'] },
-                            { word: '生長', zhuyin: ['ㄕㄥ', 'ㄓㄤˇ'] }, { word: '年長', zhuyin: ['ㄋㄧㄢˊ', 'ㄓㄤˇ'] }, { word: '專長', zhuyin: ['ㄓㄨㄢ', 'ㄔㄤˊ'] }, { word: '長度', zhuyin: ['ㄔㄤˊ', 'ㄉㄨˋ'] },
-                            { word: '睡覺', zhuyin: ['ㄕㄨㄟˋ', 'ㄐㄧㄠˋ'] }, { word: '午覺', zhuyin: ['ㄨˇ', 'ㄐㄧㄠˋ'] }, { word: '發覺', zhuyin: ['ㄈㄚ', 'ㄐㄩㄝˊ'] }, { word: '感覺', zhuyin: ['ㄍㄢˇ', 'ㄐㄩㄝˊ'] },
-                            { word: '種菜', zhuyin: ['ㄓㄨㄥˋ', 'ㄘㄞˋ'] }, { word: '接種', zhuyin: ['ㄐㄧㄝ', 'ㄓㄨㄥˋ'] }, { word: '種植', zhuyin: ['ㄓㄨㄥˋ', 'ㄓˊ'] }, { word: '種子', zhuyin: ['ㄓㄨㄥˇ', 'ㄗˇ'] }, { word: '各種', zhuyin: ['ㄍㄜˋ', 'ㄓㄨㄥˇ'] },
-                            { word: '分開', zhuyin: ['ㄈㄣ', 'ㄎㄞ'] }, { word: '平分', zhuyin: ['ㄆㄧㄥˊ', 'ㄈㄣ'] }, { word: '身分', zhuyin: ['ㄕㄣ', 'ㄈㄣˋ'] }, { word: '部分', zhuyin: ['ㄅㄨˋ', 'ㄈㄣˋ'] },
-                            { word: '幾乎', zhuyin: ['ㄐㄧ', 'ㄏㄨ'] }, { word: '幾許', zhuyin: ['ㄐㄧˇ', 'ㄒㄩˇ'] }, { word: '未幾', zhuyin: ['ㄨㄟˋ', 'ㄐㄧˇ'] }
-                        ]
-                    }
-                }
-            },
+                    
             hugo: {
-                id: 'hugo', title: 'Hugo (G4)',
+                id: 'hugo', title: 'Hugo (G5)',
                 categories: {
                     '圈詞': { 
                         'L7': [{ word: '攜手', zhuyin: ['ㄒㄧ', 'ㄕㄡˇ'] }, { word: '惡化', zhuyin: ['ㄜˋ', 'ㄏㄨㄚˋ'] }, { word: '導致', zhuyin: ['ㄉㄠˇ', 'ㄓˋ'] }, { word: '變遷', zhuyin: ['ㄅㄧㄢˋ', 'ㄑㄧㄢ'] }, { word: '平均', zhuyin: ['ㄆㄧㄥˊ', 'ㄐㄩㄣ'] }, { word: '分配', zhuyin: ['ㄈㄣ', 'ㄆㄟˋ'] }, { word: '饑荒', zhuyin: ['ㄐㄧ', 'ㄏㄨㄤ'] }, { word: '鍵盤', zhuyin: ['ㄐㄧㄢˋ', 'ㄆㄢˊ'] }, { word: '傳輸', zhuyin: ['ㄔㄨㄢˊ', 'ㄕㄨ'] }, { word: '移動', zhuyin: ['ㄧˊ', 'ㄉㄨㄥˋ'] }, { word: '足跡', zhuyin: ['ㄗㄨˊ', 'ㄐㄧ'] }],
@@ -87,7 +185,7 @@
                         'L12': [{ word: '掀翻', zhuyin: ['ㄒㄧㄢ', 'ㄈㄢ'] }, { word: '呼風喚雨', zhuyin: ['ㄏㄨ', 'ㄈㄥ', 'ㄏㄨㄢˋ', 'ㄩˇ'] }, { word: '金箍棒', zhuyin: ['ㄐㄧㄣ', 'ㄍㄨ', 'ㄅㄤˋ'] }, { word: '筋斗雲', zhuyin: ['ㄐㄧㄣ', 'ㄉㄡˇ', 'ㄩㄣˊ'] }, { word: '乖乖', zhuyin: ['ㄍㄨㄞ', 'ㄍㄨㄞ'] }, { word: '壓住', zhuyin: ['ㄧㄚ', 'ㄓㄨˋ'] }, { word: '齊天大聖', zhuyin: ['ㄑㄧˊ', 'ㄊㄧㄢ', 'ㄉㄚˋ', 'ㄕㄥˋ'] }, { word: '掏出', zhuyin: ['ㄊㄠ', 'ㄔㄨ'] }, { word: '咒語', zhuyin: ['ㄓㄡˋ', 'ㄩˇ'] }, { word: '修行', zhuyin: ['ㄒㄧㄡ', 'ㄒㄧㄥˊ'] }]
                     },
                     '多音字': {
-                        'G4練習': [
+                        'G5練習': [
                             { word: '校對', zhuyin: ['ㄐㄧㄠˋ', 'ㄉㄨㄟˋ'] }, { word: '學校', zhuyin: ['ㄒㄩㄝˊ', 'ㄒㄧㄠˋ'] },
                             { word: '可惡', zhuyin: ['ㄎㄜˇ', 'ㄨˋ'] }, { word: '惡化', zhuyin: ['ㄜˋ', 'ㄏㄨㄚˋ'] },
                             { word: '禁止', zhuyin: ['ㄐㄧㄣˋ', 'ㄓˇ'] }, { word: '不禁', zhuyin: ['ㄅㄨˋ', 'ㄐㄧㄣ'] },
@@ -290,7 +388,7 @@
                                     <h3 className="text-2xl sm:text-3xl font-bold text-amber-900 leading-relaxed">{item.question}</h3>
                                 </div>
                                 
-                                    <div className="grid grid-cols-1 gap-4 w-full mb-6">
+                                <div className="grid grid-cols-1 gap-4 w-full mb-6">
                                     {item.shuffledOptions.map((opt, idx) => {
                                         const isCorrect = opt.text === item.answer;
                                         let btnClass = "bg-white border-blue-100 hover:border-blue-400 hover:-translate-y-1 shadow-sm text-blue-900";
